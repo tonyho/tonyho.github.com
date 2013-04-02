@@ -7,7 +7,7 @@ TIMEZONE = 'Asia/Shanghai'
 
 DEFAULT_LANG = 'zhs'
 
-SITENAME = "Beauty is the creator of beauties"
+SITENAME = "Beauties are the creator of beauties"
 AUTHOR = 'TonyHo'
 
 DISQUS_SITENAME = 'tonyhoblog'
