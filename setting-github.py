@@ -28,7 +28,7 @@ LINKS = (('dofine', '<http://www.dofine.me>'),
          )#友情链接~
 
 SOCIAL = (
-          ('github', '<https://github.com/x-wei>'),
+          ('github', '<http://github.com/tonyho>'),
           )#社交网络链接
           #~ ('twitter', '<http://twitter.com/farseerfc>'),
           #~ ('facebook', '<http://www.facebook.com/farseerfc>'),
