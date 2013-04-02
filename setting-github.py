@@ -32,7 +32,7 @@ SOCIAL = (
         ('weibo', 'http://weibo.com/u/1132375127'),
         )#社交网络链接
 
-TWITTER_USERNAME = 'TonyHo'
+#TWITTER_USERNAME = 'TonyHo'
 SIDEBAR_CUSTOM = r"""
 <li class="nav-header"><h4><i class="icon-list-alt"></i>Weibo</h4></li>
 <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
