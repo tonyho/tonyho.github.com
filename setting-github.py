@@ -11,8 +11,8 @@ SITENAME = "Beauties are the creator of beauties"
 AUTHOR = 'TonyHo'
 
 DISQUS_SITENAME = 'tonyhoblog'
-GITHUB_URL = '<http://tonyho.github.io>'#github链接
-SITEURL = '<http://tonyho.github.com>'
+GITHUB_URL = 'http://tonyho.github.io'#github链接
+SITEURL = 'http://tonyho.github.com'
 GOOGLE_ANALYTICS = 'UA-30756331-1'#谷歌站点分析
 TAG_FEED_ATOM  = 'feeds/%s.atom.xml'
 
@@ -23,14 +23,14 @@ OUTPUT_PATH = '.'
 #需要把输出路径从默认的'output'改成根目录(your_id.github.com目录), 因为githubpage需要把index.html上传到repo的master分支的根目录才可以!
 PATH = 'posts'#这个是指定放置.md/.rst文件的目录
 
-LINKS = (('dofine', '<http://www.dofine.me>'),
-         ('farseerfc', "<http://farseerfc.github.com/>"),
-         )#友情链接~
+LINKS = (('dofine', 'http://www.dofine.me'),
+        ('farseerfc', "http://farseerfc.github.com/"),
+        )#友情链接~
 
 SOCIAL = (
-          ('github', '<http://github.com/tonyho>'),
-           ('weibo', '<http://weibo.com/u/1132375127>'),
-          )#社交网络链接
+        ('github', 'http://github.com/tonyho'),
+        ('weibo', 'http://weibo.com/u/1132375127'),
+        )#社交网络链接
 
 TWITTER_USERNAME = 'TonyHo'
 SIDEBAR_CUSTOM = r"""
