@@ -34,14 +34,18 @@ SOCIAL = (
 
 #TWITTER_USERNAME = 'TonyHo'
 SIDEBAR_CUSTOM = r"""
-<li class="nav-header"><h4><i class="icon-list-alt"></i>Weibo</h4></li>
-<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
+<script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;picsize=medium&amp;hidelogo=yes" ></script>
+<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=300&skin=1&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
+
+
 """
 
-SIDEBAR_CUSTOM = r"""
-<li class="nav-header"><h4><i class="icon-list-alt"></i>Weibo</h4></li>
-<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
-"""
+#SIDEBAR_CUSTOM = r"""
+#<script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;hidelogo=yes" ></script>
+#<li class="nav-header"><h4><i class="icon-list-alt"></i>Weibo</h4></li>
+#<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
+#
+#"""
 
 
 # TWITTER_USERNAME = 'TonyHo'
