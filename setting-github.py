@@ -29,11 +29,13 @@ LINKS = (('dofine', 'http://www.dofine.me'),
 
 SOCIAL = (
         ('github', 'http://github.com/tonyho'),
-        ('weibo', 'http://weibo.com/u/1132375127'),
+        #('weibo', 'http://weibo.com/u/1132375127'),
         )#社交网络链接
 
 #TWITTER_USERNAME = 'TonyHo'
 SIDEBAR_CUSTOM = r"""
+
+
 <script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;picsize=medium&amp;hidelogo=yes" ></script>
 <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=300&skin=1&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
 
@@ -49,6 +51,15 @@ var jiathis_config = {data_track_clickback:'true'};
 	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide"></script>
 <!-- UJian Button END -->
 
+
+<Script Language="JavaScript"> 
+var timedate= new Date("nov 26,2012"); 
+var now = new Date(); 
+var date = now.getTime() - timedate.getTime(); 
+var time = Math.floor(date / (1000 * 60 * 60 * 24)); 
+if (time >= 0) ;
+document.write("<p style='text-align: center'><strong><font style='color:green;font-size:36px;'><br/><br/>"+time +"</font>th</strong> running days <br/><strong> <br/> </strong></p>");
+</Script>
 
 """
 
