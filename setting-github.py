@@ -23,8 +23,11 @@ OUTPUT_PATH = '.'
 #需要把输出路径从默认的'output'改成根目录(your_id.github.com目录), 因为githubpage需要把index.html上传到repo的master分支的根目录才可以!
 PATH = 'posts'#这个是指定放置.md/.rst文件的目录
 
-LINKS = (('dofine', 'http://www.dofine.me'),
-        ('farseerfc', "http://farseerfc.github.com/"),
+LINKS = (
+	('IBM developerworks','http://www.ibm.com/developerworks/'),
+	('Yocto docs','https://www.yoctoproject.org/documentation/current'),
+	#('dofine', 'http://www.dofine.me'),
+        #('farseerfc', "http://farseerfc.github.com/"),
         )#友情链接~
 
 SOCIAL = (
@@ -34,6 +37,19 @@ SOCIAL = (
 
 #TWITTER_USERNAME = 'TonyHo'
 SIDEBAR_CUSTOM = r"""
+
+
+<script src="http://apis.google.com/js/plusone.js"></script>
+
+<div
+
+data-filename="My Statement.pdf"
+
+data-sitename="My Company Name"
+
+data-src="/path/to/myfile.pdf">
+
+</div>
 
 
 <script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;picsize=medium&amp;hidelogo=yes" ></script>
@@ -62,6 +78,8 @@ document.write("<p style='text-align: center'><strong><font style='color:green;f
 </Script>
 
 """
+
+GOOGLE_CUSTOM_SEARCH_SIDEBAR = "010418818026634312633:0kgxbuitfaa"
 
 #SIDEBAR_CUSTOM = r"""
 #<script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;hidelogo=yes" ></script>
