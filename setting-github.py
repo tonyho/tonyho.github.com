@@ -39,18 +39,6 @@ SOCIAL = (
 SIDEBAR_CUSTOM = r"""
 
 
-<script src="http://apis.google.com/js/plusone.js"></script>
-
-<div
-
-data-filename="My Statement.pdf"
-
-data-sitename="My Company Name"
-
-data-src="/path/to/myfile.pdf">
-
-</div>
-
 
 <script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;picsize=medium&amp;hidelogo=yes" ></script>
 
@@ -79,7 +67,7 @@ document.write("<p style='text-align: center'><strong><font style='color:green;f
 
 """
 
-GOOGLE_CUSTOM_SEARCH_SIDEBAR = "010418818026634312633:0kgxbuitfaa"
+#GOOGLE_CUSTOM_SEARCH_SIDEBAR = "010418818026634312633:0kgxbuitfaa"
 
 #SIDEBAR_CUSTOM = r"""
 #<script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;hidelogo=yes" ></script>
