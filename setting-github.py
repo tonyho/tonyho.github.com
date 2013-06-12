@@ -39,9 +39,10 @@ SOCIAL = (
 SIDEBAR_CUSTOM = r"""
 
 
+<br/><p><embed src="http://fm.xinli001.com/188/miniplayer.swf" quality="high" width="255" height="37" type="application/x-shockwave-flash"></embed></p>
 
 <script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;picsize=medium&amp;hidelogo=yes" ></script>
-
+<br/>
 <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
 
 
