@@ -36,7 +36,7 @@
 &lt;hr /&gt;
 &lt;p&gt;①可以看&lt;a href="http://forums.anandtech.com/showthread.php?t=2330027"&gt;AnTuTu and Intel&lt;/a&gt;这篇文章，里面提到了安兔兔对ICC编译器对Intel处理器的优化，ARM这边却连neon也没有使用。同时&lt;a href="http://www.eetimes.com/author.asp?section_id=36&amp;amp;doc_id=1318894"&gt;另一篇文章&lt;/a&gt;说到了安兔兔在版本变高后，评分下降的issue。&lt;/p&gt;
 &lt;p&gt;②关于编译选项，可以man gcc，搜索对应的选项来查看详细内容。给出一个CLFAGS示例：
-&lt;img alt="CFLAGS" src="./ArmBenchMark/CFLAGS.png" /&gt;
+&lt;img alt="CFLAGS" src="./static/ArmBenchMark/CFLAGS.png" /&gt;
 其中这些参数可以在kernel启动后使用&lt;code&gt;cat /proc/cpuinfo&lt;/code&gt;查看Arch架构。&lt;/p&gt;
 &lt;p&gt;③关于计算方面的测试，有一个不错的文档&lt;a href="http://www.ee.unlv.edu/~meiyang/ecg700/readings/ARM%20Cortex-A8%20vs.%20Intel%20Atom.pdf"&gt;ARM Cortex-A8 vs. Intel Atom&lt;/a&gt;：，里面介绍了4中测试Integer和Float的工具，并用这些工具对Atom和Beagle Bone板子进行的测试比较和说明。另外&lt;a href="http://www.keil.com/benchmarks/"&gt;Keil的这个网页&lt;/a&gt;上对这些测试程序和Item也有一些介绍。&lt;/p&gt;
 &lt;p&gt;④编译与运行可以参考&lt;a href="http://blog.sina.com.cn/s/blog_5d9051c00100dl2z.html"&gt;这个网页的文章&lt;/a&gt;，需要根据直接的板子SoC更改CFLAGS。&lt;/p&gt;

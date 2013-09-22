@@ -22,6 +22,7 @@ DEFAULT_CATEGORY ='misc'
 OUTPUT_PATH = '.'
 #需要把输出路径从默认的'output'改成根目录(your_id.github.com目录), 因为githubpage需要把index.html上传到repo的master分支的根目录才可以!
 PATH = 'posts'#这个是指定放置.md/.rst文件的目录
+STATIC_PATHS = ["static", ]
 
 LINKS = (
 	('IBM developerworks','http://www.ibm.com/developerworks/'),

@@ -54,7 +54,7 @@ SD/eMMC可以使用dd命令来测试，例如一个读写的测试命令示例�
 ①可以看[AnTuTu and Intel](http://forums.anandtech.com/showthread.php?t=2330027)这篇文章，里面提到了安兔兔对ICC编译器对Intel处理器的优化，ARM这边却连neon也没有使用。同时[另一篇文章](http://www.eetimes.com/author.asp?section_id=36&doc_id=1318894)说到了安兔兔在版本变高后，评分下降的issue。
 
 ②关于编译选项，可以man gcc，搜索对应的选项来查看详细内容。给出一个CLFAGS示例：
-![CFLAGS](./ArmBenchMark/CFLAGS.png)
+![CFLAGS](./static/ArmBenchMark/CFLAGS.png)
 其中这些参数可以在kernel启动后使用`cat /proc/cpuinfo`查看Arch架构。
 
 ③关于计算方面的测试，有一个不错的文档[ARM Cortex-A8 vs. Intel Atom](http://www.ee.unlv.edu/~meiyang/ecg700/readings/ARM%20Cortex-A8%20vs.%20Intel%20Atom.pdf)：，里面介绍了4中测试Integer和Float的工具，并用这些工具对Atom和Beagle Bone板子进行的测试比较和说明。另外[Keil的这个网页](http://www.keil.com/benchmarks/)上对这些测试程序和Item也有一些介绍。
