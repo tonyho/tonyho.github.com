@@ -6,8 +6,8 @@
 &lt;h2&gt;☞启动流程&lt;/h2&gt;
 &lt;p&gt;要做启动时间优化，需要对启动过程非常熟悉。下面从启动流程说起。&lt;/p&gt;
 &lt;p&gt;不同的嵌入式设备启动流程很可能不一样，但是绝大部分的linux/Android设备都是一样或者类似的。
-&lt;img alt="Linux-boot-sequence" src="./static/SpeedupBooting/pics/Linux-boot-sequence.png" /&gt;
- ❤图片来源于：&lt;a href="http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time" title="Texas Instruments Wiki"&gt;http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time&lt;/a&gt;&lt;/p&gt;
+&lt;img alt="Linux-boot-sequence" src="./static/SpeedupBooting/pics/Linux-boot-sequence.png" /&gt;&lt;/p&gt;
+&lt;p&gt;❤图片来源于：&lt;a href="http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time" title="Texas Instruments Wiki"&gt;http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;☞工具准备：&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;串口行间数据计时工具&lt;a href="http://elinux.org/Grabserial"&gt;&lt;code&gt;Grabserial&lt;/code&gt;&lt;/a&gt;的安装与使用&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;因为依赖python的serial模块，先安装它，在Ubuntu中安装python-serial：&lt;/p&gt;

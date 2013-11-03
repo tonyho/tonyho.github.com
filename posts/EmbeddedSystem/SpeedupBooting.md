@@ -17,6 +17,7 @@ Tags: ES
 
 不同的嵌入式设备启动流程很可能不一样，但是绝大部分的linux/Android设备都是一样或者类似的。
 ![Linux-boot-sequence](./static/SpeedupBooting/pics/Linux-boot-sequence.png)
+
  ❤图片来源于：[http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time](http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time "Texas Instruments Wiki")
 
 
