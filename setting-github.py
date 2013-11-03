@@ -19,7 +19,8 @@ TAG_FEED_ATOM  = 'feeds/%s.atom.xml'
 
 PLUGIN_PATH = u"../pelican-plugins"
 
-PLUGINS = ["sitemap","gzip_cache"]
+##PLUGINS = ["sitemap","gzip_cache"]
+PLUGINS = ["sitemap"]
 
 ## 配置sitemap 插件
 SITEMAP = {

@@ -163,8 +163,7 @@ uboot在启动到bootm后，会加载kernel到内存中并检验解压，然后�
 2. 去掉log输出，在kernel可以添加`quit`到Command line中。
 
 ## ☞均衡考虑
-- 1.模块化还是built-in？
-- built-in不仅仅增加kernel的大小，对于kernel存储在慢设备的情况下，影响较大，首先
+- 1.Kernel驱动模块化还是built-in？ built-in不仅仅增加kernel的大小，对于kernel存储在慢设备的情况下，影响较大，且初始化会占用时间。
 - 2.存储介质的选择
 - 3.初始化的时序？这个设备/功能真的需要在一开始就初始化吗？如果不需要，那么可以在使用时在初始化吗？
 

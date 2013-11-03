@@ -136,8 +136,7 @@
 &lt;/ol&gt;
 &lt;h2&gt;☞均衡考虑&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;1.模块化还是built-in？&lt;/li&gt;
-&lt;li&gt;built-in不仅仅增加kernel的大小，对于kernel存储在慢设备的情况下，影响较大，首先&lt;/li&gt;
+&lt;li&gt;1.Kernel驱动模块化还是built-in？ built-in不仅仅增加kernel的大小，对于kernel存储在慢设备的情况下，影响较大，且初始化会占用时间。&lt;/li&gt;
 &lt;li&gt;2.存储介质的选择&lt;/li&gt;
 &lt;li&gt;3.初始化的时序？这个设备/功能真的需要在一开始就初始化吗？如果不需要，那么可以在使用时在初始化吗？&lt;/li&gt;
 &lt;/ul&gt;
