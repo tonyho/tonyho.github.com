@@ -1,6 +1,6 @@
 Date: 2010-12-03
-Title:Third time test 
-Slug: Third-blog
+Title:For time test 
+Slug: Test-blog
 Tags: ES
 
 Hi here is the work.

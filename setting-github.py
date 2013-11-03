@@ -7,14 +7,34 @@ TIMEZONE = 'Asia/Shanghai'
 
 DEFAULT_LANG = 'zhs'
 
-SITENAME = "Beauties are the creator of beauties"
+SITENAME = "美是美的创造者"
 AUTHOR = 'TonyHo'
 
 DISQUS_SITENAME = 'tonyhoblog'
 GITHUB_URL = 'http://tonyho.github.io'#github链接
-SITEURL = 'http://tonyho.github.com'
+SITEURL = 'http://tonyho.github.io'
 GOOGLE_ANALYTICS = 'UA-30756331-1'#谷歌站点分析
 TAG_FEED_ATOM  = 'feeds/%s.atom.xml'
+
+
+PLUGIN_PATH = u"../pelican-plugins"
+
+PLUGINS = ["sitemap","gzip_cache"]
+
+## 配置sitemap 插件
+SITEMAP = {
+    "format": "xml",
+    "priorities": {
+        "articles": 0.7,
+        "indexes": 0.5,
+        "pages": 0.3,
+    },
+    "changefreqs": {
+        "articles": "monthly",
+        "indexes": "daily",
+        "pages": "monthly",
+    }
+}
 
 DEFAULT_PAGINATION = 10#默认每一页有多少篇文章
 
@@ -42,7 +62,9 @@ SIDEBAR_CUSTOM = r"""
 
 <br/><p><embed src="http://fm.xinli001.com/188/miniplayer.swf" quality="high" width="255" height="37" type="application/x-shockwave-flash"></embed></p>
 
-<script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?show=collection&amp;n=8&amp;columns=2&amp;picsize=medium&amp;hidelogo=yes" ></script>
+<script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?selection=latest&amp;picsize=small&amp;hideself=on&amp;show=collection&amp;n=9&amp;cat=book&amp;columns=3"></script>
+
+
 <br/>
 <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
 
