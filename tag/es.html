@@ -90,6 +90,39 @@
       <div class="row">
         <div class="span9" id="content">
         <div class="article">
+                <h1><a href="http://tonyho.github.io/Speed up Booting Embedded System.html">Speed up Booting Embedded System</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-10-03T00:00:00">
+        <i class="icon-calendar"></i>Thu 03 October 2013
+</abbr>
+<span class="label">By</span>
+<a href="http://tonyho.github.io/author/tonyho.html"><i class="icon-user"></i>TonyHo</a>
+<span class="label">Category</span>
+<a href="http://tonyho.github.io/category/embeddedsystem.html"><i class="icon-folder-open"></i>EmbeddedSystem</a>.
+
+
+<span class="label">Tags</span>
+	<a href="http://tonyho.github.io/tag/es.html"><i class="icon-tag"></i>ES</a>
+</footer><!-- /.post-info --></div>
+                <div class="summary"><p>嵌入式产品的启动时间一般是一个指标，像大部分Android手机几乎没有为启动加速做过优化，可以改进的地方非常多。当然因为Android用得最多的地方是手机，难得冷启动一次。</p>
+<p>用户从按下电源键开始，看到<code>boot logo</code>/<code>boot splash</code>到出现可操作的Home/App画面，需要的时间越少，自然越好，产品的竞争力也越强。</p>
+<p>一般没有系统的嵌入式设备启动都是上电即进入正常工作流程，这里只说linux/Android及类似的系统；下面将会简单的说明和列举从启动流程到各个启动过程都可以使用的方法，以及快速启动。</p>
+<hr />
+<h2>☞启动流程</h2>
+<p>要做启动时间优化，需要对启动过程非常熟悉。下面从启动流程说起。</p>
+<p>不同的嵌入式设备启动流程很可能不一样，但是绝大部分的linux/Android设备都是一样或者类似的。
+<img alt="Linux-boot-sequence" src="./static/SpeedupBooting/pics/Linux-boot-sequence.png" />
+ ❤图片来源于：<a href="http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time" title="Texas Instruments Wiki">http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time</a></p>
+<h2>☞工具准备：</h2>
+<p><strong>串口行间数据计时工具<a href="http://elinux.org/Grabserial"><code>Grabserial</code></a>的安装与使用</strong></p>
+<p>因为依赖python的serial模块，先安装它，在Ubuntu中安装python-serial：</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">serial ...</span></pre></div>
+                        <a class="btn primary xsmall" href="http://tonyho.github.io/Speed up Booting Embedded System.html">more ...</a>
+                </div>
+        </div>
+        <hr />
+        <div class="article">
                 <h1><a href="http://tonyho.github.io/ARM Linux BenchMark.html">ARM Linux BenchMark</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>

@@ -1,5 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>美是美的创造者</title><link href="http://tonyho.github.io/" rel="alternate"></link><link href="http://tonyho.github.io/feeds/embeddedsystem.atom.xml" rel="self"></link><id>http://tonyho.github.io/</id><updated>2013-09-21T00:00:00+08:00</updated><entry><title>ARM Linux BenchMark</title><link href="http://tonyho.github.io/ARM%20Linux%20BenchMark.html" rel="alternate"></link><updated>2013-09-21T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-09-21:ARM Linux BenchMark.html</id><summary type="html">&lt;h2&gt;1.背景说明&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>美是美的创造者</title><link href="http://tonyho.github.io/" rel="alternate"></link><link href="http://tonyho.github.io/feeds/embeddedsystem.atom.xml" rel="self"></link><id>http://tonyho.github.io/</id><updated>2013-10-03T00:00:00+08:00</updated><entry><title>Speed up Booting Embedded System</title><link href="http://tonyho.github.io/Speed%20up%20Booting%20Embedded%20System.html" rel="alternate"></link><updated>2013-10-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-10-03:Speed up Booting Embedded System.html</id><summary type="html">&lt;p&gt;嵌入式产品的启动时间一般是一个指标，像大部分Android手机几乎没有为启动加速做过优化，可以改进的地方非常多。当然因为Android用得最多的地方是手机，难得冷启动一次。&lt;/p&gt;
+&lt;p&gt;用户从按下电源键开始，看到&lt;code&gt;boot logo&lt;/code&gt;/&lt;code&gt;boot splash&lt;/code&gt;到出现可操作的Home/App画面，需要的时间越少，自然越好，产品的竞争力也越强。&lt;/p&gt;
+&lt;p&gt;一般没有系统的嵌入式设备启动都是上电即进入正常工作流程，这里只说linux/Android及类似的系统；下面将会简单的说明和列举从启动流程到各个启动过程都可以使用的方法，以及快速启动。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;☞启动流程&lt;/h2&gt;
+&lt;p&gt;要做启动时间优化，需要对启动过程非常熟悉。下面从启动流程说起。&lt;/p&gt;
+&lt;p&gt;不同的嵌入式设备启动流程很可能不一样，但是绝大部分的linux/Android设备都是一样或者类似的。
+&lt;img alt="Linux-boot-sequence" src="./static/SpeedupBooting/pics/Linux-boot-sequence.png" /&gt;
+ ❤图片来源于：&lt;a href="http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time" title="Texas Instruments Wiki"&gt;http://processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;☞工具准备：&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;串口行间数据计时工具&lt;a href="http://elinux.org/Grabserial"&gt;&lt;code&gt;Grabserial&lt;/code&gt;&lt;/a&gt;的安装与使用&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;因为依赖python的serial模块，先安装它，在Ubuntu中安装python-serial：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;获取工具脚本：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//makelinux.com/emb/grabserial&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;添加可执行权限：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;chmod&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;设置以&lt;code&gt;U-boot&lt;/code&gt;字符串出现为基准计时的使用示例：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/dev/ttyUSB0&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="mi"&gt;115200&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;U-Boot&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果要同一行内部计时，例如解压kernel的时候是在一行内的，可以使用&lt;code&gt;-i&lt;/code&gt;选项：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="p"&gt;..&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Uncompressing Linux&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;done,&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;我们从MMC出现时开始计时，以下为实例log，其中第一列为从出现指定字符串开始的计时，第二列为与上一行log的间隔：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/dev/ttyUSB0&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="mi"&gt;115200&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;MMC:&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;Opening&lt;/span&gt; &lt;span class="n"&gt;serial&lt;/span&gt; &lt;span class="n"&gt;port&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;
+&lt;span class="mi"&gt;115200&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="n"&gt;N1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;xonxoff&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;rtcdtc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="n"&gt;Program&lt;/span&gt; &lt;span class="n"&gt;will&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="n"&gt;seconds&lt;/span&gt;
+&lt;span class="n"&gt;Printing&lt;/span&gt; &lt;span class="n"&gt;timing&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;each&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt;
+&lt;span class="n"&gt;Matching&lt;/span&gt; &lt;span class="n"&gt;pattern&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;Boot&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="n"&gt;base&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;
+&lt;span class="n"&gt;Use&lt;/span&gt; &lt;span class="n"&gt;Control&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;stop&lt;/span&gt;&lt;span class="p"&gt;...&lt;/span&gt;
+&lt;span class="mf"&gt;0.00&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.000&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Board&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;MX6Q&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;unknown&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;board&lt;/span&gt; &lt;span class="n"&gt;Board&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mh"&gt;0x63012&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;POR&lt;/span&gt; &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="mf"&gt;2.30&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.008&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Boot&lt;/span&gt; &lt;span class="n"&gt;Device&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;SPI&lt;/span&gt; &lt;span class="n"&gt;NOR&lt;/span&gt;
+&lt;span class="mf"&gt;2.30&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.012&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;I2C&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;ready&lt;/span&gt;
+&lt;span class="mf"&gt;2.31&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.022&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;MMC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;span class="mf"&gt;2.40&lt;/span&gt;       &lt;span class="mi"&gt;8&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.148&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;JEDEC&lt;/span&gt; &lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mh"&gt;0xc2&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mh"&gt;0x20&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mh"&gt;0x18&lt;/span&gt;
+&lt;span class="mf"&gt;2.41&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.152&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="mi"&gt;16384&lt;/span&gt; &lt;span class="n"&gt;KiB&lt;/span&gt; &lt;span class="n"&gt;M25P32&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="n"&gt;MB&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;now&lt;/span&gt; &lt;span class="n"&gt;current&lt;/span&gt; &lt;span class="n"&gt;device&lt;/span&gt;
+&lt;span class="mf"&gt;2.41&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.160&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Using&lt;/span&gt; &lt;span class="k"&gt;default&lt;/span&gt; &lt;span class="n"&gt;environment&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.165&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;In&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;    &lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.168&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.171&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Err&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.175&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Net&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;尽管时间测量工具有很多当都各有各的缺点，例如这个工具就无法输入，同时在kernel、uboot分别可以设置&lt;code&gt;printk.time=1&lt;/code&gt;、 &lt;a href="http://stackoverflow.com/questions/16644430/uboot-option-to-print-boot-time-prefixes"&gt;&lt;code&gt;CONFIG_SHOW_BOOT_PROGRESS&lt;/code&gt;&lt;/a&gt;来打印时间，但是这样打印时间有几个缺点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;占用target的资源导致打印时间不准确&lt;/li&gt;
+&lt;li&gt;如果在uboot之前还有引导程序将无法打印&lt;/li&gt;
+&lt;li&gt;无法对行内计时，例如无法测量kernel解压时间&lt;code&gt;Uncompressing Linux... done&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;准备好工具，下面将按照启动流程的各个步骤来说明可以如何提高启动速度。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;☞Primary Bootloader&lt;/h2&gt;
+&lt;p&gt;几乎绝大部分嵌入式SoC，在上电启动后(执行ROM Code阶段)，都会按照下面的两个方式的其中一种运行：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;直接到某个拥有类内存接口的存储器(例如NOR-Flash)中开始执行（XIP）&lt;/li&gt;
+&lt;li&gt;从Nand/SD/SPI-NorFlash等不可XIP存储设备中拷贝指定大小的内容到内部RAM中，然后在内部RAM中开始执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在许多嵌入式系统中很可能没有这个preboot（primary bootloader）的阶段（preboot我是这么叫的），或者说没有明显的primary bootloader（只编译和烧写一个bootloader文件），但是很可能在，直接就到了下面的Secondary bootloader阶段，但是不管如何&lt;/p&gt;
+&lt;p&gt;尽可能只做必须要做的事情，例如只做必须的设备的初始化&lt;/p&gt;
+&lt;h2&gt;☞Secondary Bootloader&lt;/h2&gt;
+&lt;p&gt;这一阶段bootloader也可以认为是Secondary bootloader或者是bootloader自身的第二阶段，例如uboot中的自拷贝&lt;code&gt;relocate&lt;/code&gt;，一般按照顺序完成
+初始化必须的外设，例如&lt;/p&gt;
+&lt;p&gt;这一个阶段，可以考虑以下方面来提速：&lt;/p&gt;
+&lt;p&gt;◕对于Cortex-A8/A9/A15使用armv7-a而不是默认的armv5来编译&lt;/p&gt;
+&lt;p&gt;◕避免在primary bootloader中初始化过的设备再一次初始化&lt;/p&gt;
+&lt;p&gt;◕去掉不需要的功能，例如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;loadb &lt;/li&gt;
+&lt;li&gt;bdinfo&lt;/li&gt;
+&lt;li&gt;不需要的外设初始化，例如网络设备&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;◕去掉遍历搜索查询，例如如果只用到一个MMC/MTD设备，那么没有必要去遍历所有的控制器&lt;/p&gt;
+&lt;p&gt;◕是否需要relocate&lt;/p&gt;
+&lt;p&gt;◕用普通的存储替换hash表存储&lt;code&gt;environment&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;◕根据需要决定是否去掉uImage或者uramdisk的检验&lt;/p&gt;
+&lt;p&gt;◕如果第一阶段的uramdisk很小，可以考虑直接built-in到kernel中&lt;/p&gt;
+&lt;p&gt;◕如果开发精力足够，那么考虑使用其他为启动优化过的bootloader替换常规的uboot&lt;/p&gt;
+&lt;h2&gt;☞kernel&lt;/h2&gt;
+&lt;p&gt;uboot在启动到bootm后，会加载kernel到内存中并检验解压，然后跳入到kernel中。kernel会初始化Memory、外设等，并输出log，最后是mount rootfs，最后再跳入执行用户态的init（不同的文件系统执行的第一个程序会稍有不同，也可以在CMDLINE或者boot传入的args用&lt;code&gt;init=XXX&lt;/code&gt;指定）程序。&lt;/p&gt;
+&lt;p&gt;因此上面对kernel的被加载和启动的描述，想加速就需要考虑下面几个方面：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;kernel size&lt;/li&gt;
+&lt;li&gt;外设等的初始化&lt;/li&gt;
+&lt;li&gt;各个功能的初始化&lt;/li&gt;
+&lt;li&gt;log输出&lt;/li&gt;
+&lt;li&gt;文件系统&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;◕根据实际测量确定是否压缩kernel，以及选择压缩方式。&lt;/p&gt;
+&lt;p&gt;◕去掉不需要的&lt;code&gt;Debug&lt;/code&gt;和&lt;code&gt;Trace&lt;/code&gt;选项，例如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kernel hacking里面的选择，例如Trace、KGDB&lt;/li&gt;
+&lt;li&gt;Kernel debug&lt;/li&gt;
+&lt;li&gt;文件系统和driver的debug&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;◕去除功能和输出冗余项，例如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不需要的外设和支持：&lt;/li&gt;
+&lt;li&gt;不需要的文件系统&lt;/li&gt;
+&lt;li&gt;去掉产生/proc/config.gz&lt;/li&gt;
+&lt;li&gt;减少不需要的输出，去掉verbose输出。&lt;/li&gt;
+&lt;li&gt;去掉能够的的Test代码编译支持&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;☞文件系统挂载和Userspace&lt;/h2&gt;
+&lt;p&gt;在执行第一个用户程序（user space程序）时，一般会继续挂着需要的其他文件系统，加载被延后的模块，启动一些Service。例如Android的init就会根据init.&lt;code&gt;MACHINE&lt;/code&gt;.rc去执行各个任务，例如启动&lt;code&gt;bootani&lt;/code&gt;服务，启动&lt;code&gt;vold&lt;/code&gt;服务，加载驱动模块XXX.ko，启动Deamon等。其他基于busybox的很可能会去执行runlevel下的脚本和Deamon/Service。&lt;/p&gt;
+&lt;p&gt;在这一阶段，我们需要做的是尽可能的让用户到达可操作状态，例如例如出现锁屏界面，或者指定应用程序。&lt;/p&gt;
+&lt;p&gt;在这一阶段，因为init进程是同步的，Android的init.MACHINE.rc里面的insmod也是同步的，因此可以采取的部分方法有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;service和insmod的处理（可以更改init进制来从同步改成异步）&lt;/li&gt;
+&lt;li&gt;尽早尽可能的并行化&lt;/li&gt;
+&lt;li&gt;根据需要更改启动顺序，例如Android的bootani启动动画的可以放到后面，而不是作为第一个启动的service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;☞Application&lt;/h2&gt;
+&lt;p&gt;当kernel启动，各个必须的service/Deamon都启动后，需要的就是启动应用程序，让用户尽快的可以操作。这方面的改进可以看参考资料。&lt;/p&gt;
+&lt;h2&gt;☞通用方法&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;在编译的时候对size进行优化，去掉编译&lt;code&gt;-g&lt;/code&gt;选项。&lt;/li&gt;
+&lt;li&gt;去掉log输出，在kernel可以添加&lt;code&gt;quit&lt;/code&gt;到Command line中。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;☞均衡考虑&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;1.模块化还是built-in？&lt;/li&gt;
+&lt;li&gt;built-in不仅仅增加kernel的大小，对于kernel存储在慢设备的情况下，影响较大，首先&lt;/li&gt;
+&lt;li&gt;2.存储介质的选择&lt;/li&gt;
+&lt;li&gt;3.初始化的时序？这个设备/功能真的需要在一开始就初始化吗？如果不需要，那么可以在使用时在初始化吗？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上都是从正常启动流程来说明各个阶段可以用来提高启动速度的方法，除此外，还有一种快速启动的方法来提高启动速度--快速启动。&lt;/p&gt;
+&lt;h2&gt;☞快速启动snapshot方案&lt;/h2&gt;
+&lt;p&gt;许多SoC公司和solution公司都提供快速启动snapshot方案；快速启动和正常启动有着不一样的启动流程，一般省略了一些步骤。快速启动snapshot如同起名所描述的一样，在系统正常使用时，做一份snapshot保存起来，下载启动时直接恢复snapshot image。&lt;/p&gt;
+&lt;p&gt;快速启动原理都是类似或者几乎一样的，应用这种方案的嵌入式系统应该算是最快的了，但是同时也是难度最大，最容易出现问题。
+例如lineo提供的warp snapshot方案：&lt;/p&gt;
+&lt;p&gt;1】下图表示了正常启动和用快速启动各自的启动流程，快速启动省去了一些加载流程和初始化。当然许多有自己独自寄存器的外设很可能还是需要重新初始化。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="warp_startup" src="./static/SpeedupBooting/pics/warp_process.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;2】下图描述了制作和解压一个snapshot image的过程。snapshot image都有压缩和解压的处理。想象一下，这里做snapshot的主存内容一定是只用到的，否则太大了。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Warp_squence" src="./static/SpeedupBooting/pics/SnapshotSequence.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;❤以上两张图片来源于：&lt;a href="http://www.lineo.co.jp/modules/products/warp2.html"&gt;Lineo solution&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;上面的网页的引用，描述了刚才说过的快速启动制作和启动流程：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Warp!! saves snapshot image of the system memory (while applications are running) and hardware status (contents of register) to the previously ensured hibernation area in secondary storage, such as Flash. Once the power is on, directly restore memory image from snapshot at a burst. By this operation, loads of initiation code loading and memory accessing are greatly reduced and achieve the high speed. &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;另一段描述了快速启动的特点：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The key of speed-up is high speed expansion of snapshot images to RAM.
+- Reduce size of snapshot image to be saved.
+- Ensured throughput of secondary storage.
+- High speed decompression of compressed data.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如同在这个section最前面说的一样，快速启动：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;复制必要的数据到主存中&lt;/li&gt;
+&lt;li&gt;然后恢复SoC的硬件状态（寄存器）
+如果做出来的snapshot文件很小，且存储介质的读取速度比较快，那么将可以在冷启动后很短的时间内完成启动。否则很可能并不会加快。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;快速启动的难点在于：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如何确定哪些是被使用了的内存内容？&lt;/li&gt;
+&lt;li&gt;该用什么压缩和解压算法来平衡加载时间和压缩/解压时间？&lt;/li&gt;
+&lt;li&gt;很多外设和程序/Service很可能在快速启动后需要额外的处理&lt;/li&gt;
+&lt;li&gt;在uboot和kernel中添加加载和制作snapshot image的驱动&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这些问题的解决，需要非常深入的Linux内存知识，以及snapshot的压缩解压算法。另外快速启动尽管也可以在linux下使用一个service来做&lt;code&gt;boot logo/splash&lt;/code&gt;，但是更常见也可能是更好的做法是在uboot中完成，而这有需要考虑snapshot image解压的时候不能覆盖&lt;code&gt;boot logo/splash&lt;/code&gt;所在的主存区域，同时在做snapshot image的时候也不要保存这部分。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;☞总结：&lt;/h2&gt;
+&lt;p&gt;对正常冷启动的每个阶段都进行优化可以在一定程度上加快启动速度，甚至也可以达到很不错的效果，这些优化大都比较简单，容易实现，成本较低，花费的时间也不会太长，但在一些特殊领域，在价格等因素的考虑下，很可能无法使用快速储存器的时候，就算优化到极致也无法解决。&lt;/p&gt;
+&lt;p&gt;一般而言，使用快速启动是最快的，但是难度也最大，其他的优化，很可能在用到极限也无法达到启动要求的情况下可以考虑快速启动。同时使用快速启动，会很容易出现一些service和外设的不正常，这个时候就需要对这些service和外设进行额外的处理，整个过程很可能需要耗费大量的时间，倘若较成本而言，时间更重要，也可以选择一些公司的快速启动方案。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;☞参考：&lt;/h2&gt;
+&lt;p&gt;◇1 有一个非常好的加快启动速度的系列教程视频（很全面，共有三个部分，下载速度较慢）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://free-electrons.com/blog/elce-2010-tutorial-videos/"&gt;elce-2010-tutorial-videos/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;◇2 TI Wiki/u-boot上面的一个减少启动时间示例，配出了图示和一步步提高启动速度的说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://processors.wiki.ti.com/index.php/Sitara_Linux_Training:_Boot_Time_Reduction"&gt;Sitara_Linux_Training:_Boot_Time_Reduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.denx.de/wiki/DULG/AN2004_11_BootTimeOptimization"&gt;U-boot官网给出的一个减少启动时间实例&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;◇3 另一个写分析和如何减少启动时间的文档,比较全面：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.diva-portal.org/smash/get/diva2:235591/ATTACHMENT01"&gt;Analysis of Boot Time Reduction techniques in Linux&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="ES"></category></entry><entry><title>ARM Linux BenchMark</title><link href="http://tonyho.github.io/ARM%20Linux%20BenchMark.html" rel="alternate"></link><updated>2013-09-21T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-09-21:ARM Linux BenchMark.html</id><summary type="html">&lt;h2&gt;1.背景说明&lt;/h2&gt;
 &lt;p&gt;许多公司有很多不同的ARM SoC的研发产品,ARM核心可能有Cortex-A8/A9/A15，核心数可能有单核双核和四核.现在,几乎每出一款手机,网络上马上就有人对其评测.对比和评测不同ARM SoC 芯片以及嵌入式系统是非常有必要的;通过不同的SoC和其运行的OS对比,可以帮助我们了解我们产品的性能，并根据测试得知系统的瓶颈、找出需要改善的方面。&lt;/p&gt;
 &lt;p&gt;嵌入式产品的硬件一般都是由处理器、主存、存储器、显示设备、以及其他外设组成。嵌入式产品的软件方面，一般都选用嵌入式系统，如小的RTOS，如VxWorks、μC/OS-III、RTT、DJYOS、FreeRTOSLinux，或者是更复杂的Linux、Android、WinCE。评测和对比的内容一般也主要由软件和硬件这两个方面组成。&lt;/p&gt;
 &lt;h2&gt;2.预备基础知识&lt;/h2&gt;
