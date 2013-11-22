@@ -1,5 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>美是美的创造者</title><link href="http://tonyho.github.io/" rel="alternate"></link><link href="http://tonyho.github.io/feeds/all.atom.xml" rel="self"></link><id>http://tonyho.github.io/</id><updated>2013-10-03T00:00:00+08:00</updated><entry><title>Speed up Booting Embedded System</title><link href="http://tonyho.github.io/Speed%20up%20Booting%20Embedded%20System.html" rel="alternate"></link><updated>2013-10-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-10-03:Speed up Booting Embedded System.html</id><summary type="html">&lt;p&gt;嵌入式产品的启动时间一般是一个指标，像大部分Android手机几乎没有为启动加速做过优化，可以改进的地方非常多。当然因为Android用得最多的地方是手机，难得冷启动一次。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>美是美的创造者</title><link href="http://tonyho.github.io/" rel="alternate"></link><link href="http://tonyho.github.io/feeds/all.atom.xml" rel="self"></link><id>http://tonyho.github.io/</id><updated>2013-12-05T00:00:00+08:00</updated><entry><title>用gitlabCI快速搭建一个GitServer与CI</title><link href="http://tonyho.github.io/%E7%94%A8gitlabCI%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAGitServer%E4%B8%8ECI.html" rel="alternate"></link><updated>2013-12-05T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-12-05:用gitlabCI快速搭建一个GitServer与CI.html</id><summary type="html">&lt;p&gt;一般的公司一般都有一个或者多个中央Git Server，托管着所有项目代码；同时当一个项目很大，由许多个工程组成，例如Tizen和Android，那么一般还有Continuous Integration(CI)在有人push代码到工程时编译整个项目，编译出错一般CI会发邮件给提交者和管理者，从而可以及时修正错误。&lt;/p&gt;
+&lt;h2&gt;Git Server安装与使用&lt;/h2&gt;
+&lt;p&gt;Git server很多，列举一部分：&lt;/p&gt;
+&lt;h6&gt;Windows&lt;/h6&gt;
+&lt;ul&gt;
+&lt;li&gt;GitStack：免费版只能有两个账号&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.fishlee.net/soft/scm-manager-chs/"&gt;SCM Manager&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6&gt;Linux&lt;/h6&gt;
+&lt;ul&gt;
+&lt;li&gt;GitLab&lt;/li&gt;
+&lt;li&gt;Git-Deamon&lt;/li&gt;
+&lt;li&gt;Git使用-bare生成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;获取与安装&lt;/h3&gt;
+&lt;p&gt;这里使用gitlab，到这里下载&lt;a href="http://bitnami.com/stack/gitlab"&gt;bitnami gitlab一键安装包&lt;/a&gt;。安装非常简单，只需要添加可执行权限然后用sudo ./XXX.run
+执行即出现图形化的安装向导。在安装过程中需要设置用户名和密码用于后面配置使用。&lt;/p&gt;
+&lt;h3&gt;gitlab的使用&lt;/h3&gt;
+&lt;p&gt;直接用IP地址或者网址登陆即可。例如：&lt;code&gt;http://192.168.1.120&lt;/code&gt;，要求用户名和密码时使用安装时输入的用户名和密码。&lt;/p&gt;
+&lt;p&gt;检查状态：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$&lt;/span&gt; &lt;span class="nv"&gt;sudo&lt;/span&gt; &lt;span class="sr"&gt;/home/gi&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="sr"&gt;/gitlab-shell/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt; 
+&lt;span class="n"&gt;Check&lt;/span&gt; &lt;span class="n"&gt;GitLab&lt;/span&gt; &lt;span class="n"&gt;API&lt;/span&gt; &lt;span class="n"&gt;access:&lt;/span&gt; &lt;span class="n"&gt;OK&lt;/span&gt;
+&lt;span class="n"&gt;Check&lt;/span&gt; &lt;span class="n"&gt;directories&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;files:&lt;/span&gt; 
+    &lt;span class="sr"&gt;/opt/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;6.3.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="sr"&gt;/apps/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;repositories:&lt;/span&gt; &lt;span class="n"&gt;OK&lt;/span&gt;
+    &lt;span class="sr"&gt;/home/gi&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="sr"&gt;/.ssh/&lt;/span&gt;&lt;span class="n"&gt;authorized_keys:&lt;/span&gt; &lt;span class="n"&gt;OK&lt;/span&gt;
+    &lt;span class="sr"&gt;/opt/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;6.3.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="sr"&gt;/redis/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;redis&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;cli:&lt;/span&gt; &lt;span class="n"&gt;OK&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;从上面可以看到repository的位置&lt;code&gt;/opt/gitlab-6.3.0-0/apps/gitlab/repositories&lt;/code&gt;。既然知道了repository在哪，那么我们就可以导入repo了。&lt;/p&gt;
+&lt;h2&gt;Repository的导入&lt;/h2&gt;
+&lt;h6&gt;什么时候需要导入Repository？&lt;/h6&gt;
+&lt;p&gt;以前要想sync下Android的整个代码，需要极长的时间，现在要想repo sync下Tizen的代码，在国内一般会比较困难，经常出现&lt;code&gt;unexpected hang&lt;/code&gt;之类的错误，就算写个sync的脚本不断的去sync结果也很可能是好几天都无法sync成功。除此之外，我们很可能需要更改代码，而这个代码很可能并不愿意push到Tizen Gerrit去，这个时候，很可能就需要自己搭建一个本地的repository供开发人员使用。&lt;/p&gt;
+&lt;h3&gt;如何导入一个远程仓库&lt;/h3&gt;
+&lt;h6&gt;第一步：在本地生成一个bare仓库&lt;/h6&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;bare&lt;/span&gt; &lt;span class="n"&gt;PathofGitReop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;XXXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;参考&lt;a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%8D%8F%E8%AE%AE"&gt;Pro Git&lt;/a&gt;&lt;/p&gt;
+&lt;h6&gt;第二步：拷贝bare repository到gitlab的repositories中&lt;/h6&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="n"&gt;XXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="sr"&gt;/opt/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;6.3.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="sr"&gt;/apps/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="sr"&gt;/repositories/&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h6&gt;第三步：使用&lt;/h6&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;bundle&lt;/span&gt; &lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="n"&gt;rake&lt;/span&gt; &lt;span class="n"&gt;gitlab:import:repos&lt;/span&gt; &lt;span class="n"&gt;RAILS_ENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;production&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;参考&lt;a href="https://github.com/gitlabhq/gitlabhq/wiki/Import-existing-repositories-into-GitLab"&gt;Gitlab Wiki&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;另外还可以在新建project中添加：
+&lt;img alt="improt" src="./pics/NewProjectImport.jpg" /&gt;&lt;/p&gt;
+&lt;h3&gt;将repo切换到其他地方&lt;/h3&gt;
+&lt;p&gt;让gitlab同步其他repository
+参考stackoverflow上的&lt;a href="http://stackoverflow.com/questions/14288288/gitlab-repository-mirroring"&gt;这个问题回答&lt;/a&gt;&lt;/p&gt;
+&lt;h6&gt;#如何导入一个本地的clone代码&lt;/h6&gt;
+&lt;p&gt;有一个&lt;code&gt;.git&lt;/code&gt;的git clone目录，就是一个repository，因此可以从这个repository clone代码。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="nv"&gt;@http:&lt;/span&gt;&lt;span class="sr"&gt;//&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;Address&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Path&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;Git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;dir&lt;/span&gt; 
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt;&lt;span class="nv"&gt;@172&lt;/span&gt;&lt;span class="mf"&gt;.26.188.175&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;hexiongjun&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;uboot&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;imx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt;&lt;span class="nv"&gt;@172&lt;/span&gt;&lt;span class="mf"&gt;.26.188.175&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;hexiongjun&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;如何导入一个本地的用&lt;code&gt;git clone --mirror&lt;/code&gt;产生的bare仓库&lt;/h4&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt;    
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt;&lt;span class="nv"&gt;@IP:user&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;XXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="nb"&gt;push&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;u&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt; 
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="nb"&gt;push&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;u&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;otherbranch&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;当然也可以完全不用这么麻烦，因为.git目录就是bare repository。所以也可以直接将这个copy过去。&lt;/p&gt;
+&lt;p&gt;注意就现在这个版本（6.3.0），gitlab还不支持导入git协议的reop。&lt;/p&gt;
+&lt;h1&gt;持续集成(Continues Integration)&lt;/h1&gt;
+&lt;p&gt;持续集成(△2)，是一个在有人提交文件后对整个project不断编译构建的系统。&lt;code&gt;Jenkins&lt;/code&gt;是比较有名的持续集成系统，Gitlab也有一个CI。在安装的时候就默认会选择上。
+在安装完成后可以进入到:&lt;code&gt;http://IP or Hostname/githubci&lt;/code&gt;即可进入集成系统的管理web。&lt;/p&gt;
+&lt;h4&gt;添加权限&lt;/h4&gt;
+&lt;p&gt;gitlab ci安装好后会创建一个叫做gitlab_ci的用户，ci要build gitlab中的项目第一不就是从gitlab中取一个项目，gitlab_ci用户需要有获取project的权限。将&lt;code&gt;/home/gitlab_ci/.ssh/id_rsa.pub&lt;/code&gt;中的内容复制粘贴到需要被ci 添加的项目中。
+&lt;img alt="ssh" src="./pics/ssh.jpg" /&gt;&lt;/p&gt;
+&lt;h4&gt;编译配置&lt;/h4&gt;
+&lt;p&gt;在编译脚本中如果需要配置环境变量，那么就需要注意了，如下图，因为build scripts中的每一行都是在一个单独的sh环境中运行，因此，需要将多条命令用&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;整合成一条。另外在侧边可以输入branch分支。&lt;/p&gt;
+&lt;p&gt;另外还有一点，在现在这个gitlabCI版本中，scripts中是不允许空行的。否则会出现&lt;code&gt;Diretory not found&lt;/code&gt;的错误提示，参考&lt;a href="https://groups.google.com/forum/#!topic/gitlabhq/RReEEyLyAGs"&gt;这里&lt;/a&gt;。
+&lt;img alt="buildconfig" src="./pics/buildscript.jpg" /&gt;点击此页面可以跳到对应的CI中。&lt;/p&gt;
+&lt;p&gt;如果编译出错，那么还可以retry,先跳转到Builds页面：
+&lt;img alt="buildsummary" src="./pics/buildssummary.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;然后再右侧有一个Retry按钮：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="buildretry" src="./pics/ciretry.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;对应的编译log就在此页面中。而在gitlab对应的项目网页中，页面右侧将有一个build success的图片：
+&lt;img alt="sucess" src="./pics/success.png" /&gt;&lt;/p&gt;
+&lt;p&gt;这个图片的连接可以在这里找到：
+&lt;img alt="sucess" src="./buildsuccesspng.jpg" /&gt;&lt;/p&gt;
+&lt;h4&gt;新添加project到CI&lt;/h4&gt;
+&lt;p&gt;在新添加任务到CI中后，需要为其分配&lt;code&gt;runner&lt;/code&gt;来编译，点击下面图中Token，切换到这个runner：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="sucess" src="./runnerassign.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;然后enable刚才新添加的项目。然后再对这个runner &lt;code&gt;assign to all&lt;/code&gt; 即可。
+&lt;img alt="sucess" src="./pics/runner.jpg" /&gt;&lt;/p&gt;
+&lt;h2&gt;参考：&lt;/h2&gt;
+&lt;p&gt;△1：&lt;a href="https://github.com/gitlabhq/gitlabhq/issues/3424"&gt;gitlab improt repo error&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;△2：&lt;a href="http://en.wikipedia.org/wiki/Continuous_integration"&gt;CI&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;△3: &lt;a href="http://www.emoji-cheat-sheet.com/"&gt;可以用与gitlab的表情&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;△4: &lt;a href="http://gitolite.com/concepts/bare.html"&gt;Bare repo释义&lt;/a&gt;；另外比较简洁的理解参考&lt;a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2-Git"&gt;Pro Git&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;△4: &lt;a href="https://bitnami.com/stacks"&gt;bitnami&lt;/a&gt;还提供其他许多软件的一键安装包,例如LAMP RedMine等等。&lt;/p&gt;
+&lt;h2&gt;License&lt;/h2&gt;
+&lt;p&gt;This blog post &lt;a href="http://creativecommons.org/licenses/by-nd/3.0/"&gt;is licensed under a Creative Commons Attribution-No Derivative Works 3.0 Norway License&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;&lt;a href="http://creativecommons.org/licenses/by-nd/3.0/"&gt;&lt;img alt="License" src="./pics/License.png" /&gt;&lt;/a&gt;&lt;/p&gt;</summary><category term="ES"></category></entry><entry><title>Speed up Booting Embedded System</title><link href="http://tonyho.github.io/Speed%20up%20Booting%20Embedded%20System.html" rel="alternate"></link><updated>2013-10-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-10-03:Speed up Booting Embedded System.html</id><summary type="html">&lt;p&gt;嵌入式产品的启动时间一般是一个指标，像大部分Android手机几乎没有为启动加速做过优化，可以改进的地方非常多。当然因为Android用得最多的地方是手机，难得冷启动一次。&lt;/p&gt;
 &lt;p&gt;用户从按下电源键开始，看到&lt;code&gt;boot logo&lt;/code&gt;/&lt;code&gt;boot splash&lt;/code&gt;到出现可操作的Home/App画面，需要的时间越少，自然越好，产品的竞争力也越强。&lt;/p&gt;
 &lt;p&gt;一般没有系统的嵌入式设备启动都是上电即进入正常工作流程，这里只说linux/Android及类似的系统；下面将会简单的说明和列举从启动流程到各个启动过程都可以使用的方法，以及快速启动。&lt;/p&gt;
 &lt;hr /&gt;
@@ -11,51 +117,51 @@
 &lt;h2&gt;☞工具准备：&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;串口行间数据计时工具&lt;a href="http://elinux.org/Grabserial"&gt;&lt;code&gt;Grabserial&lt;/code&gt;&lt;/a&gt;的安装与使用&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;因为依赖python的serial模块，先安装它，在Ubuntu中安装python-serial：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;serial&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;获取工具脚本：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//makelinux.com/emb/grabserial&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="n"&gt;http:&lt;/span&gt;&lt;span class="sr"&gt;//m&lt;/span&gt;&lt;span class="n"&gt;akelinux&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="sr"&gt;/emb/g&lt;/span&gt;&lt;span class="n"&gt;rabserial&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;添加可执行权限：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;chmod&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nb"&gt;chmod&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;./&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;设置以&lt;code&gt;U-boot&lt;/code&gt;字符串出现为基准计时的使用示例：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/dev/ttyUSB0&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="mi"&gt;115200&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;U-Boot&amp;quot;&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="sr"&gt;/grabserial  -v -d &amp;quot;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;&lt;span class="s"&gt;&amp;quot; -b 115200 -w 8 -p N -s 1 -e 30 -t -m &amp;quot;&lt;/span&gt;&lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;Boot&lt;/span&gt;&lt;span class="err"&gt;&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;如果要同一行内部计时，例如解压kernel的时候是在一行内的，可以使用&lt;code&gt;-i&lt;/code&gt;选项：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="p"&gt;..&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Uncompressing Linux&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;done,&amp;quot;&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$&lt;/span&gt; &lt;span class="err"&gt;../&lt;/span&gt;&lt;span class="nv"&gt;grabserial&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Uncompressing Linux&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;done,&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;我们从MMC出现时开始计时，以下为实例log，其中第一列为从出现指定字符串开始的计时，第二列为与上一行log的间隔：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/dev/ttyUSB0&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="mi"&gt;115200&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;MMC:&amp;quot;&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$sudo&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="sr"&gt;/grabserial  -v -d &amp;quot;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;&lt;span class="s"&gt;&amp;quot; -b 115200 -w 8 -p N -s 1 -e 30 -t -m &amp;quot;&lt;/span&gt;&lt;span class="n"&gt;MMC:&lt;/span&gt;&lt;span class="err"&gt;&amp;quot;&lt;/span&gt;
 
-&lt;span class="n"&gt;Opening&lt;/span&gt; &lt;span class="n"&gt;serial&lt;/span&gt; &lt;span class="n"&gt;port&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;
-&lt;span class="mi"&gt;115200&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="n"&gt;N1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;xonxoff&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;rtcdtc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="n"&gt;Opening&lt;/span&gt; &lt;span class="n"&gt;serial&lt;/span&gt; &lt;span class="n"&gt;port&lt;/span&gt; &lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;
+&lt;span class="mi"&gt;115200&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="n"&gt;N1:xonxoff&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;rtcdtc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
 &lt;span class="n"&gt;Program&lt;/span&gt; &lt;span class="n"&gt;will&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="n"&gt;seconds&lt;/span&gt;
-&lt;span class="n"&gt;Printing&lt;/span&gt; &lt;span class="n"&gt;timing&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;each&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt;
-&lt;span class="n"&gt;Matching&lt;/span&gt; &lt;span class="n"&gt;pattern&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;Boot&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="n"&gt;base&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;
-&lt;span class="n"&gt;Use&lt;/span&gt; &lt;span class="n"&gt;Control&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;stop&lt;/span&gt;&lt;span class="p"&gt;...&lt;/span&gt;
-&lt;span class="mf"&gt;0.00&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.000&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Board&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;MX6Q&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;unknown&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;board&lt;/span&gt; &lt;span class="n"&gt;Board&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mh"&gt;0x63012&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;POR&lt;/span&gt; &lt;span class="p"&gt;]&lt;/span&gt;
-&lt;span class="mf"&gt;2.30&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.008&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Boot&lt;/span&gt; &lt;span class="n"&gt;Device&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;SPI&lt;/span&gt; &lt;span class="n"&gt;NOR&lt;/span&gt;
-&lt;span class="mf"&gt;2.30&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.012&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;I2C&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;ready&lt;/span&gt;
-&lt;span class="mf"&gt;2.31&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.022&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;MMC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
-&lt;span class="mf"&gt;2.40&lt;/span&gt;       &lt;span class="mi"&gt;8&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.148&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;JEDEC&lt;/span&gt; &lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mh"&gt;0xc2&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mh"&gt;0x20&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mh"&gt;0x18&lt;/span&gt;
-&lt;span class="mf"&gt;2.41&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.152&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="mi"&gt;16384&lt;/span&gt; &lt;span class="n"&gt;KiB&lt;/span&gt; &lt;span class="n"&gt;M25P32&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="n"&gt;MB&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;now&lt;/span&gt; &lt;span class="n"&gt;current&lt;/span&gt; &lt;span class="n"&gt;device&lt;/span&gt;
-&lt;span class="mf"&gt;2.41&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.160&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Using&lt;/span&gt; &lt;span class="k"&gt;default&lt;/span&gt; &lt;span class="n"&gt;environment&lt;/span&gt;
+&lt;span class="n"&gt;Printing&lt;/span&gt; &lt;span class="n"&gt;timing&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="nb"&gt;each&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt;
+&lt;span class="n"&gt;Matching&lt;/span&gt; &lt;span class="n"&gt;pattern&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;U-Boot&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="n"&gt;base&lt;/span&gt; &lt;span class="nb"&gt;time&lt;/span&gt;
+&lt;span class="n"&gt;Use&lt;/span&gt; &lt;span class="n"&gt;Control&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;stop&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;
+&lt;span class="mf"&gt;0.00&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.000&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Board:&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;MX6Q:&lt;/span&gt; &lt;span class="n"&gt;unknown&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;board&lt;/span&gt; &lt;span class="n"&gt;Board:&lt;/span&gt; &lt;span class="mh"&gt;0x63012&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;POR&lt;/span&gt; &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="mf"&gt;2.30&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.008&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Boot&lt;/span&gt; &lt;span class="n"&gt;Device:&lt;/span&gt; &lt;span class="n"&gt;SPI&lt;/span&gt; &lt;span class="n"&gt;NOR&lt;/span&gt;
+&lt;span class="mf"&gt;2.30&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.012&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;I2C:&lt;/span&gt;   &lt;span class="n"&gt;ready&lt;/span&gt;
+&lt;span class="mf"&gt;2.31&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.022&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;MMC:&lt;/span&gt;   &lt;span class="n"&gt;FSL_USDHC:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC:&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FSL_USDHC:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;span class="mf"&gt;2.40&lt;/span&gt;       &lt;span class="mi"&gt;8&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.148&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;JEDEC&lt;/span&gt; &lt;span class="n"&gt;ID:&lt;/span&gt; &lt;span class="mh"&gt;0xc2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mh"&gt;0x20&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mh"&gt;0x18&lt;/span&gt;
+&lt;span class="mf"&gt;2.41&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.152&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="mi"&gt;16384&lt;/span&gt; &lt;span class="n"&gt;KiB&lt;/span&gt; &lt;span class="n"&gt;M25P32&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="n"&gt;MB&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;now&lt;/span&gt; &lt;span class="n"&gt;current&lt;/span&gt; &lt;span class="n"&gt;device&lt;/span&gt;
+&lt;span class="mf"&gt;2.41&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.160&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Using&lt;/span&gt; &lt;span class="n"&gt;default&lt;/span&gt; &lt;span class="n"&gt;environment&lt;/span&gt;
 &lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    
-&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.165&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;In&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;    &lt;span class="n"&gt;serial&lt;/span&gt;
-&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.168&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;serial&lt;/span&gt;
-&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.171&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Err&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="n"&gt;serial&lt;/span&gt;
-&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.175&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Net&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.165&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;In:&lt;/span&gt;    &lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.168&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Out:&lt;/span&gt;   &lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.171&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Err:&lt;/span&gt;   &lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;span class="mf"&gt;2.42&lt;/span&gt;       &lt;span class="mi"&gt;0&lt;/span&gt;    &lt;span class="p"&gt;[&lt;/span&gt;    &lt;span class="mf"&gt;0.175&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Net:&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -219,8 +325,8 @@
 &lt;p&gt;有一点需要说明的是：在linux启动过程中会打印BogoMIPS不一定准确。这方面可以参考ARM官方的说明，使用Dhrystone，当然现在在计算能力测试方面，现在大家可能更认可CoreMark和CPU2006，而不是Dhrystone。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;一些外设的测试：&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;SD/eMMC可以使用dd命令来测试，例如一个读写的测试命令示例：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Read&lt;/span&gt;&lt;span class="err"&gt;：&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;dd&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;mmcblk0&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;null&lt;/span&gt; &lt;span class="n"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4094&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40960&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; 
-&lt;span class="n"&gt;Write&lt;/span&gt;&lt;span class="err"&gt;：&lt;/span&gt;&lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;dd&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;mmcblk0&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;zero&lt;/span&gt; &lt;span class="n"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4094&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40960&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;Read&lt;/span&gt;&lt;span class="err"&gt;：&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;dd&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="sr"&gt;/mmcblk0 of=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;null&lt;/span&gt; &lt;span class="n"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4094&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40960&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; 
+&lt;span class="n"&gt;Write&lt;/span&gt;&lt;span class="err"&gt;：&lt;/span&gt;&lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;dd&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="sr"&gt;/mmcblk0 if=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;zero&lt;/span&gt; &lt;span class="n"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4094&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40960&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -253,18 +359,18 @@
 &lt;h3&gt;为高级用户而设计的稳定的 Markdown 编辑器&lt;/h3&gt;
 &lt;p&gt;MarkdownPad 支持多种 Markdown 解析引擎，包括 标准 Markdown 、 Markdown 扩展 (包括表格支持) 以及 GitHub 风格 Markdown 。&lt;/p&gt;
 &lt;p&gt;有了标签式多文档界面、PDF 导出、内置的图片上传工具、会话管理、拼写检查、自动保存、语法高亮以及内置的 CSS 管理器，您可以随心所欲地使用 MarkdownPad。&lt;/p&gt;</summary><category term="blog"></category></entry><entry><title>For time test</title><link href="http://tonyho.github.io/Test-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:Test-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="n"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nb"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;</summary><category term="ES"></category></entry><entry><title>Third time test</title><link href="http://tonyho.github.io/Third-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:Third-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="n"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nb"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;</summary><category term="ES"></category></entry><entry><title>Second time test</title><link href="http://tonyho.github.io/test-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:test-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="n"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nb"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;</summary><category term="blog"></category></entry></feed>

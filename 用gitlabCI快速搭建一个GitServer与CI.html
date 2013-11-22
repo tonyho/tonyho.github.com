@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>用gitlabCI快速搭建一个GitServer与CI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  <!-- Le styles -->
+  <link href="./theme/css/html4css1.css" rel="stylesheet">
+  <link rel="stylesheet" href="./theme/css/bootstrap.css" type="text/css" />
+  <link href="./theme/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="./theme/css/font-awesome.css" rel="stylesheet">
+  <link href="./theme/css/pygments.css" rel="stylesheet">
+  <link href="./theme/css/local.css" rel="stylesheet">
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="./" type="application/atom+xml" rel="alternate" title="美是美的创造者 ATOM Feed" />
+  
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <!--<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>-->
+          <a class="brand" href="./index.html">美是美的创造者 </a>
+          <div class="fcnav-collapse">
+            <ul class="nav">
+                                          			  <li class="divider-vertical"></li>
+                                              <li >
+                    <a href="./category/EmbeddedSystem.html">
+						<i class="icon-folder-open icon-large"></i>EmbeddedSystem
+					</a>
+                  </li>
+                                <li class="active">
+                    <a href="./category/Git.html">
+						<i class="icon-folder-open icon-large"></i>Git
+					</a>
+                  </li>
+                                <li >
+                    <a href="./category/misc.html">
+						<i class="icon-folder-open icon-large"></i>misc
+					</a>
+                  </li>
+              			  
+			  <ul class="nav pull-right">
+				<li><a href="./archives.html"><i class="icon-th-list"></i>Archives</a></li>
+			  </ul>
+			  
+            </ul>
+            <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>-->
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span9" id="content">
+            <section id="content">    
+	<article>
+		<header>
+			<h1>
+				<a href=""
+					rel="bookmark" 
+					title="Permalink to 用gitlabCI快速搭建一个GitServer与CI">
+					用gitlabCI快速搭建一个GitServer与CI 
+				</a>
+				 
+			</h1> 
+		</header>
+		<div class="entry-content">
+		<div class="well">
+			<footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-12-05T00:00:00">
+	<i class="icon-calendar"></i>Thu 05 December 2013
+</abbr>
+<span class="label">By</span>
+<a href="./author/tonyho.html"><i class="icon-user"></i>TonyHo</a>
+<span class="label">Category</span>
+<a href="./category/git.html"><i class="icon-folder-open"></i>Git</a>. 
+
+	
+<span class="label">Tags</span> 
+	<a href="./tag/es.html"><i class="icon-tag"></i>ES</a>
+</footer><!-- /.post-info -->		</div>
+		<p>一般的公司一般都有一个或者多个中央Git Server，托管着所有项目代码；同时当一个项目很大，由许多个工程组成，例如Tizen和Android，那么一般还有Continuous Integration(CI)在有人push代码到工程时编译整个项目，编译出错一般CI会发邮件给提交者和管理者，从而可以及时修正错误。</p>
+<h2>Git Server安装与使用</h2>
+<p>Git server很多，列举一部分：</p>
+<h6>Windows</h6>
+<ul>
+<li>GitStack：免费版只能有两个账号</li>
+<li><a href="http://www.fishlee.net/soft/scm-manager-chs/">SCM Manager</a></li>
+</ul>
+<h6>Linux</h6>
+<ul>
+<li>GitLab</li>
+<li>Git-Deamon</li>
+<li>Git使用-bare生成</li>
+</ul>
+<h3>获取与安装</h3>
+<p>这里使用gitlab，到这里下载<a href="http://bitnami.com/stack/gitlab">bitnami gitlab一键安装包</a>。安装非常简单，只需要添加可执行权限然后用sudo ./XXX.run
+执行即出现图形化的安装向导。在安装过程中需要设置用户名和密码用于后面配置使用。</p>
+<h3>gitlab的使用</h3>
+<p>直接用IP地址或者网址登陆即可。例如：<code>http://192.168.1.120</code>，要求用户名和密码时使用安装时输入的用户名和密码。</p>
+<p>检查状态：</p>
+<div class="codehilite"><pre><span class="nv">$</span> <span class="nv">sudo</span> <span class="sr">/home/gi</span><span class="n">t</span><span class="sr">/gitlab-shell/</span><span class="n">bin</span><span class="o">/</span><span class="n">check</span> 
+<span class="n">Check</span> <span class="n">GitLab</span> <span class="n">API</span> <span class="n">access:</span> <span class="n">OK</span>
+<span class="n">Check</span> <span class="n">directories</span> <span class="ow">and</span> <span class="n">files:</span> 
+    <span class="sr">/opt/gi</span><span class="n">tlab</span><span class="o">-</span><span class="mf">6.3.0</span><span class="o">-</span><span class="mi">0</span><span class="sr">/apps/gi</span><span class="n">tlab</span><span class="o">/</span><span class="n">repositories:</span> <span class="n">OK</span>
+    <span class="sr">/home/gi</span><span class="n">t</span><span class="sr">/.ssh/</span><span class="n">authorized_keys:</span> <span class="n">OK</span>
+    <span class="sr">/opt/gi</span><span class="n">tlab</span><span class="o">-</span><span class="mf">6.3.0</span><span class="o">-</span><span class="mi">0</span><span class="sr">/redis/</span><span class="n">bin</span><span class="o">/</span><span class="n">redis</span><span class="o">-</span><span class="n">cli:</span> <span class="n">OK</span>
+</pre></div>
+
+
+<p>从上面可以看到repository的位置<code>/opt/gitlab-6.3.0-0/apps/gitlab/repositories</code>。既然知道了repository在哪，那么我们就可以导入repo了。</p>
+<h2>Repository的导入</h2>
+<h6>什么时候需要导入Repository？</h6>
+<p>以前要想sync下Android的整个代码，需要极长的时间，现在要想repo sync下Tizen的代码，在国内一般会比较困难，经常出现<code>unexpected hang</code>之类的错误，就算写个sync的脚本不断的去sync结果也很可能是好几天都无法sync成功。除此之外，我们很可能需要更改代码，而这个代码很可能并不愿意push到Tizen Gerrit去，这个时候，很可能就需要自己搭建一个本地的repository供开发人员使用。</p>
+<h3>如何导入一个远程仓库</h3>
+<h6>第一步：在本地生成一个bare仓库</h6>
+<div class="codehilite"><pre><span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">bare</span> <span class="n">PathofGitReop</span><span class="o">.</span><span class="n">git</span> <span class="n">XXXX</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+
+
+<p>参考<a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%8D%8F%E8%AE%AE">Pro Git</a></p>
+<h6>第二步：拷贝bare repository到gitlab的repositories中</h6>
+<div class="codehilite"><pre><span class="n">cp</span> <span class="n">XXX</span><span class="o">.</span><span class="n">git</span> <span class="sr">/opt/gi</span><span class="n">tlab</span><span class="o">-</span><span class="mf">6.3.0</span><span class="o">-</span><span class="mi">0</span><span class="sr">/apps/gi</span><span class="n">tlab</span><span class="sr">/repositories/</span>
+</pre></div>
+
+
+<h6>第三步：使用</h6>
+<div class="codehilite"><pre><span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="n">gitlab:import:repos</span> <span class="n">RAILS_ENV</span><span class="o">=</span><span class="n">production</span>
+</pre></div>
+
+
+<p>参考<a href="https://github.com/gitlabhq/gitlabhq/wiki/Import-existing-repositories-into-GitLab">Gitlab Wiki</a>。</p>
+<p>另外还可以在新建project中添加：
+<img alt="improt" src="./pics/NewProjectImport.jpg" /></p>
+<h3>将repo切换到其他地方</h3>
+<p>让gitlab同步其他repository
+参考stackoverflow上的<a href="http://stackoverflow.com/questions/14288288/gitlab-repository-mirroring">这个问题回答</a></p>
+<h6>#如何导入一个本地的clone代码</h6>
+<p>有一个<code>.git</code>的git clone目录，就是一个repository，因此可以从这个repository clone代码。</p>
+<div class="codehilite"><pre><span class="n">git</span> <span class="n">clone</span> <span class="n">user</span><span class="nv">@http:</span><span class="sr">//</span><span class="n">IP</span> <span class="n">Address</span><span class="o">/</span><span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Git</span> <span class="n">clone</span> <span class="n">dir</span> 
+<span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nv">@172</span><span class="mf">.26.188.175</span><span class="p">:</span><span class="n">hexiongjun</span><span class="o">/</span><span class="n">uboot</span><span class="o">-</span><span class="n">imx</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">origin</span> <span class="n">git</span><span class="nv">@172</span><span class="mf">.26.188.175</span><span class="p">:</span><span class="n">hexiongjun</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">remote</span> <span class="n">rm</span> <span class="n">origin</span>
+</pre></div>
+
+
+<h4>如何导入一个本地的用<code>git clone --mirror</code>产生的bare仓库</h4>
+<div class="codehilite"><pre><span class="n">git</span> <span class="n">remote</span> <span class="n">rm</span> <span class="n">origin</span>    
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">origin</span> <span class="n">git</span><span class="nv">@IP:user</span><span class="o">/</span><span class="n">XXX</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="nb">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">master</span> 
+<span class="n">git</span> <span class="nb">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">otherbranch</span>
+</pre></div>
+
+
+<p>当然也可以完全不用这么麻烦，因为.git目录就是bare repository。所以也可以直接将这个copy过去。</p>
+<p>注意就现在这个版本（6.3.0），gitlab还不支持导入git协议的reop。</p>
+<h1>持续集成(Continues Integration)</h1>
+<p>持续集成(△2)，是一个在有人提交文件后对整个project不断编译构建的系统。<code>Jenkins</code>是比较有名的持续集成系统，Gitlab也有一个CI。在安装的时候就默认会选择上。
+在安装完成后可以进入到:<code>http://IP or Hostname/githubci</code>即可进入集成系统的管理web。</p>
+<h4>添加权限</h4>
+<p>gitlab ci安装好后会创建一个叫做gitlab_ci的用户，ci要build gitlab中的项目第一不就是从gitlab中取一个项目，gitlab_ci用户需要有获取project的权限。将<code>/home/gitlab_ci/.ssh/id_rsa.pub</code>中的内容复制粘贴到需要被ci 添加的项目中。
+<img alt="ssh" src="./pics/ssh.jpg" /></p>
+<h4>编译配置</h4>
+<p>在编译脚本中如果需要配置环境变量，那么就需要注意了，如下图，因为build scripts中的每一行都是在一个单独的sh环境中运行，因此，需要将多条命令用<code>&amp;&amp;</code>整合成一条。另外在侧边可以输入branch分支。</p>
+<p>另外还有一点，在现在这个gitlabCI版本中，scripts中是不允许空行的。否则会出现<code>Diretory not found</code>的错误提示，参考<a href="https://groups.google.com/forum/#!topic/gitlabhq/RReEEyLyAGs">这里</a>。
+<img alt="buildconfig" src="./pics/buildscript.jpg" />点击此页面可以跳到对应的CI中。</p>
+<p>如果编译出错，那么还可以retry,先跳转到Builds页面：
+<img alt="buildsummary" src="./pics/buildssummary.jpg" /></p>
+<p>然后再右侧有一个Retry按钮：</p>
+<p><img alt="buildretry" src="./pics/ciretry.jpg" /></p>
+<p>对应的编译log就在此页面中。而在gitlab对应的项目网页中，页面右侧将有一个build success的图片：
+<img alt="sucess" src="./pics/success.png" /></p>
+<p>这个图片的连接可以在这里找到：
+<img alt="sucess" src="./buildsuccesspng.jpg" /></p>
+<h4>新添加project到CI</h4>
+<p>在新添加任务到CI中后，需要为其分配<code>runner</code>来编译，点击下面图中Token，切换到这个runner：</p>
+<p><img alt="sucess" src="./runnerassign.jpg" /></p>
+<p>然后enable刚才新添加的项目。然后再对这个runner <code>assign to all</code> 即可。
+<img alt="sucess" src="./pics/runner.jpg" /></p>
+<h2>参考：</h2>
+<p>△1：<a href="https://github.com/gitlabhq/gitlabhq/issues/3424">gitlab improt repo error</a></p>
+<p>△2：<a href="http://en.wikipedia.org/wiki/Continuous_integration">CI</a></p>
+<p>△3: <a href="http://www.emoji-cheat-sheet.com/">可以用与gitlab的表情</a></p>
+<p>△4: <a href="http://gitolite.com/concepts/bare.html">Bare repo释义</a>；另外比较简洁的理解参考<a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2-Git">Pro Git</a></p>
+<p>△4: <a href="https://bitnami.com/stacks">bitnami</a>还提供其他许多软件的一键安装包,例如LAMP RedMine等等。</p>
+<h2>License</h2>
+<p>This blog post <a href="http://creativecommons.org/licenses/by-nd/3.0/">is licensed under a Creative Commons Attribution-No Derivative Works 3.0 Norway License</a>. </p>
+<p><a href="http://creativecommons.org/licenses/by-nd/3.0/"><img alt="License" src="./pics/License.png" /></a></p>
+		</div><!-- /.entry-content -->
+				<div class="comments">
+		<h2>Comments !</h2>
+			<div id="disqus_thread"></div>
+			<script type="text/javascript">
+			   var disqus_identifier = "用gitlabCI快速搭建一个GitServer与CI.html";
+			   (function() {
+				var dsq = document.createElement('script'); 
+				dsq.type = 'text/javascript'; dsq.async = true;
+				dsq.src = 'http://tonyhoblog.disqus.com/embed.js';
+				(document.getElementsByTagName('head')[0] || 
+				 document.getElementsByTagName('body')[0]).appendChild(dsq);
+			  })();
+			</script>
+		</div>
+			</article>
+</section>
+        </div><!--/span-->
+      
+		<div class="span3" id="sidebar">
+            <div class="well">
+                <div class="sidebar-nav">
+                    <ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-external-link"></i>blogroll</h4></li>
+    <li><i class="icon-external-link"></i><a href="http://www.ibm.com/developerworks/">IBM developerworks</a></li>
+    <li><i class="icon-external-link"></i><a href="https://www.yoctoproject.org/documentation/current">Yocto docs</a></li>
+<li class="nav-header"><h4><i class="icon-home icon-large"></i> social</h4></li>
+<li><a href="./" rel="alternate"><i class="icon-bookmark icon-large"></i>atom feed</a></li>
+    <li><a href="http://github.com/tonyho"><i class="icon-github-sign icon-large"></i>github</a></li>
+
+<li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
+<li>
+<a href="./category/EmbeddedSystem.html">
+    <i class="icon-folder-open icon-large"></i>EmbeddedSystem
+</a>
+</li>
+<li>
+<a href="./category/Git.html">
+    <i class="icon-folder-open icon-large"></i>Git
+</a>
+</li>
+<li>
+<a href="./category/misc.html">
+    <i class="icon-folder-open icon-large"></i>misc
+</a>
+</li>
+
+<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+<span class="tag-2">
+	<a href="./tag/blog.html">
+		<i class="icon-tag icon-large"></i>blog
+	</a>
+</span>
+<span class="tag-1">
+	<a href="./tag/ES.html">
+		<i class="icon-tag icon-large"></i>ES
+	</a>
+</span>
+
+    
+
+
+<br/><p><embed src="http://fm.xinli001.com/188/miniplayer.swf" quality="high" width="255" height="37" type="application/x-shockwave-flash"></embed></p>
+
+<script type="text/javascript" src="http://www.douban.com/service/badge/48737245/?selection=latest&amp;picsize=small&amp;hideself=on&amp;show=collection&amp;n=9&amp;cat=book&amp;columns=3"></script>
+
+
+<br/>
+<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1132375127&verifier=b1fc848b&dpc=1"></iframe>
+
+
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jiathis_r.js?type=left&amp;uid=1676351" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!-- UJian Button BEGIN -->
+	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide"></script>
+<!-- UJian Button END -->
+
+
+<Script Language="JavaScript"> 
+var timedate= new Date("nov 26,2012"); 
+var now = new Date(); 
+var date = now.getTime() - timedate.getTime(); 
+var time = Math.floor(date / (1000 * 60 * 60 * 24)); 
+if (time >= 0) ;
+document.write("<p style='text-align: center'><strong><font style='color:green;font-size:36px;'><br/><br/>"+time +"</font>th</strong> running days <br/><strong> <br/> </strong></p>");
+</Script>
+
+
+</ul>                </div>
+            </div>
+        </div><!--/.well -->
+
+      </div><!--/row-->
+
+      <hr>
+
+      <footer><small>
+        <address id="about">
+          <p>Proudly powered by <a href="http://pelican.notmyidea.org/">Pelican <i class="icon-external-link"></i></a>, which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>. The theme is from <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>, and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+        </address><!-- /#about -->
+      </small></footer>
+
+    </div><!--/.fluid-container-->
+
+
+    <script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+	var pageTracker = _gat._getTracker("UA-30756331-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+        <script type="text/javascript">
+    var disqus_shortname = 'tonyhoblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./theme/js/jquery.js"></script>
+    <script src="./theme/js/bootstrap-transition.js"></script>
+    <script src="./theme/js/bootstrap-alert.js"></script>
+    <script src="./theme/js/bootstrap-modal.js"></script>
+    <script src="./theme/js/bootstrap-dropdown.js"></script>
+    <script src="./theme/js/bootstrap-scrollspy.js"></script>
+    <script src="./theme/js/bootstrap-tab.js"></script>
+    <script src="./theme/js/bootstrap-tooltip.js"></script>
+    <script src="./theme/js/bootstrap-popover.js"></script>
+    <script src="./theme/js/bootstrap-button.js"></script>
+    <script src="./theme/js/bootstrap-collapse.js"></script>
+    <script src="./theme/js/bootstrap-carousel.js"></script>
+    <script src="./theme/js/bootstrap-typeahead.js"></script>
+	
+	<!--<script src="./theme/js/autosidebar.js"></script>-->
+  </body>
+</html>

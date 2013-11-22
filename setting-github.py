@@ -20,22 +20,22 @@ TAG_FEED_ATOM  = 'feeds/%s.atom.xml'
 PLUGIN_PATH = u"../pelican-plugins"
 
 ##PLUGINS = ["sitemap","gzip_cache"]
-PLUGINS = ["sitemap"]
-
-## 配置sitemap 插件
-SITEMAP = {
-    "format": "xml",
-    "priorities": {
-        "articles": 0.7,
-        "indexes": 0.5,
-        "pages": 0.3,
-    },
-    "changefreqs": {
-        "articles": "monthly",
-        "indexes": "daily",
-        "pages": "monthly",
-    }
-}
+##PLUGINS = ["sitemap"]
+##
+#### 配置sitemap 插件
+##SITEMAP = {
+##    "format": "xml",
+##    "priorities": {
+##        "articles": 0.7,
+##        "indexes": 0.5,
+##        "pages": 0.3,
+##    },
+##    "changefreqs": {
+##        "articles": "monthly",
+##        "indexes": "daily",
+##        "pages": "monthly",
+##    }
+##}
 
 DEFAULT_PAGINATION = 10#默认每一页有多少篇文章
 
