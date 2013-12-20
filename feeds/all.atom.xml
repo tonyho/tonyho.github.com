@@ -19,7 +19,7 @@
 &lt;h3&gt;gitlab的使用&lt;/h3&gt;
 &lt;p&gt;直接用IP地址或者网址登陆即可。例如：&lt;code&gt;http://192.168.1.120&lt;/code&gt;，要求用户名和密码时使用安装时输入的用户名和密码。&lt;/p&gt;
 &lt;p&gt;检查状态：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$&lt;/span&gt; &lt;span class="nv"&gt;sudo&lt;/span&gt; &lt;span class="sr"&gt;/home/gi&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="sr"&gt;/gitlab-shell/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt; 
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$&lt;/span&gt; &lt;span class="nv"&gt;sudo&lt;/span&gt; &lt;span class="sr"&gt;/home/gi&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="sr"&gt;/gitlab-shell/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt; 
 &lt;span class="n"&gt;Check&lt;/span&gt; &lt;span class="n"&gt;GitLab&lt;/span&gt; &lt;span class="n"&gt;API&lt;/span&gt; &lt;span class="n"&gt;access:&lt;/span&gt; &lt;span class="n"&gt;OK&lt;/span&gt;
 &lt;span class="n"&gt;Check&lt;/span&gt; &lt;span class="n"&gt;directories&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;files:&lt;/span&gt; 
     &lt;span class="sr"&gt;/opt/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;6.3.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="sr"&gt;/apps/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;repositories:&lt;/span&gt; &lt;span class="n"&gt;OK&lt;/span&gt;
@@ -34,18 +34,18 @@
 &lt;p&gt;以前要想sync下Android的整个代码，需要极长的时间，现在要想repo sync下Tizen的代码，在国内一般会比较困难，经常出现&lt;code&gt;unexpected hang&lt;/code&gt;之类的错误，就算写个sync的脚本不断的去sync结果也很可能是好几天都无法sync成功。除此之外，我们很可能需要更改代码，而这个代码很可能并不愿意push到Tizen Gerrit去，这个时候，很可能就需要自己搭建一个本地的repository供开发人员使用。&lt;/p&gt;
 &lt;h3&gt;如何导入一个远程仓库&lt;/h3&gt;
 &lt;h6&gt;第一步：在本地生成一个bare仓库&lt;/h6&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;bare&lt;/span&gt; &lt;span class="n"&gt;PathofGitReop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;XXXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;bare&lt;/span&gt; &lt;span class="n"&gt;PathofGitReop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;XXXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;参考&lt;a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%8D%8F%E8%AE%AE"&gt;Pro Git&lt;/a&gt;&lt;/p&gt;
 &lt;h6&gt;第二步：拷贝bare repository到gitlab的repositories中&lt;/h6&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="n"&gt;XXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="sr"&gt;/opt/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;6.3.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="sr"&gt;/apps/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="sr"&gt;/repositories/&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="n"&gt;XXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="sr"&gt;/opt/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;6.3.0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="sr"&gt;/apps/gi&lt;/span&gt;&lt;span class="n"&gt;tlab&lt;/span&gt;&lt;span class="sr"&gt;/repositories/&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h6&gt;第三步：使用&lt;/h6&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;bundle&lt;/span&gt; &lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="n"&gt;rake&lt;/span&gt; &lt;span class="n"&gt;gitlab:import:repos&lt;/span&gt; &lt;span class="n"&gt;RAILS_ENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;production&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;bundle&lt;/span&gt; &lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="n"&gt;rake&lt;/span&gt; &lt;span class="n"&gt;gitlab:import:repos&lt;/span&gt; &lt;span class="n"&gt;RAILS_ENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;production&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -57,7 +57,7 @@
 参考stackoverflow上的&lt;a href="http://stackoverflow.com/questions/14288288/gitlab-repository-mirroring"&gt;这个问题回答&lt;/a&gt;&lt;/p&gt;
 &lt;h6&gt;#如何导入一个本地的clone代码&lt;/h6&gt;
 &lt;p&gt;有一个&lt;code&gt;.git&lt;/code&gt;的git clone目录，就是一个repository，因此可以从这个repository clone代码。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="nv"&gt;@http:&lt;/span&gt;&lt;span class="sr"&gt;//&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;Address&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Path&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;Git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;dir&lt;/span&gt; 
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="nv"&gt;@http:&lt;/span&gt;&lt;span class="sr"&gt;//&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="n"&gt;Address&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Path&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;Git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;dir&lt;/span&gt; 
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt;&lt;span class="nv"&gt;@172&lt;/span&gt;&lt;span class="mf"&gt;.26.188.175&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;hexiongjun&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;uboot&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;imx&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt;&lt;span class="nv"&gt;@172&lt;/span&gt;&lt;span class="mf"&gt;.26.188.175&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;hexiongjun&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt;
@@ -65,7 +65,7 @@
 
 
 &lt;h4&gt;如何导入一个本地的用&lt;code&gt;git clone --mirror&lt;/code&gt;产生的bare仓库&lt;/h4&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt;    
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt;    
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt;&lt;span class="nv"&gt;@IP:user&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;XXX&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="nb"&gt;push&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;u&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt; 
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="nb"&gt;push&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;u&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;otherbranch&lt;/span&gt;
@@ -105,7 +105,83 @@
 &lt;p&gt;△4: &lt;a href="https://bitnami.com/stacks"&gt;bitnami&lt;/a&gt;还提供其他许多软件的一键安装包,例如LAMP RedMine等等。&lt;/p&gt;
 &lt;h2&gt;License&lt;/h2&gt;
 &lt;p&gt;This blog post &lt;a href="http://creativecommons.org/licenses/by-nd/3.0/"&gt;is licensed under a Creative Commons Attribution-No Derivative Works 3.0 Norway License&lt;/a&gt;. &lt;/p&gt;
-&lt;p&gt;&lt;a href="http://creativecommons.org/licenses/by-nd/3.0/"&gt;&lt;img alt="License" src="./static/Git/pics/License.png" /&gt;&lt;/a&gt;&lt;/p&gt;</summary><category term="ES"></category></entry><entry><title>Speed up Booting Embedded System</title><link href="http://tonyho.github.io/Speed%20up%20Booting%20Embedded%20System.html" rel="alternate"></link><updated>2013-10-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-10-03:Speed up Booting Embedded System.html</id><summary type="html">&lt;p&gt;嵌入式产品的启动时间一般是一个指标，像大部分Android手机几乎没有为启动加速做过优化，可以改进的地方非常多。当然因为Android用得最多的地方是手机，难得冷启动一次。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://creativecommons.org/licenses/by-nd/3.0/"&gt;&lt;img alt="License" src="./static/Git/pics/License.png" /&gt;&lt;/a&gt;&lt;/p&gt;</summary><category term="ES"></category></entry><entry><title>SPI Nor Flash</title><link href="http://tonyho.github.io/SPI%20Nor%20Flash.html" rel="alternate"></link><updated>2013-11-24T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-11-24:SPI Nor Flash.html</id><summary type="html">&lt;h2&gt;SPI协议&lt;/h2&gt;
+&lt;h3&gt;Slave与Master&lt;/h3&gt;
+&lt;p&gt;一般而言，提供clock的一方称为master。如下图（7-1）中的SCLK方向可知：Processor为master，而Peripheral为slave。&lt;/p&gt;
+&lt;h3&gt;SPI设备接口&lt;/h3&gt;
+&lt;p&gt;SPI uses four main signals:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Master Out Slave In (MOSI)&lt;/li&gt;
+&lt;li&gt;Master In Slave Out (MISO)&lt;/li&gt;
+&lt;li&gt;Serial CLocK (SCLK or SCK) and Chip Select (CS) for the peripheral.&lt;/li&gt;
+&lt;li&gt;Some processors have a dedicated chip select for SPI interfacing called Slave Select (SS).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="SPI Interface" src="./static/SPINorFlash/pics/SPI-Interface.png" /&gt;&lt;/p&gt;
+&lt;h3&gt;SPI传输&lt;/h3&gt;
+&lt;p&gt;SPI使用移位寄存器方式传输，示意图：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="SPI transmission" src="./static/pics/SPITransmission.png" /&gt;&lt;/p&gt;
+&lt;p&gt;形成一个&lt;code&gt;循环圈&lt;/code&gt;，任何时刻对于一个SPI设备而言都有移位输入和移位输出。&lt;/p&gt;
+&lt;p&gt;如果想只读或者只写，那么在读的时候需要发送一个&lt;code&gt;dummy byte&lt;/code&gt;从而产生时钟；在写的时候简单的忽略读到的数据就可以了。&lt;/p&gt;
+&lt;h3&gt;SPI传输的四种方式&lt;/h3&gt;
+&lt;p&gt;根据&lt;code&gt;时钟极性&lt;/code&gt;和&lt;code&gt;时钟相位&lt;/code&gt;的不同共有四种，时钟极性和相位分别指：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;时钟极性(CPOL-Clock Polarity)：空闲时的极性高（&lt;code&gt;polarity high&lt;/code&gt;）或者低（&lt;code&gt;polarity low&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;时钟相位(CPHA-CLock Phase)：在上升沿还是下降沿采样数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;四种模式用图说明如下：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="SPI Register" src="./static/SPINorFlash/pics/spi-bus-timing.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;将四种模式的采样时刻（&lt;code&gt;Sampling edge&lt;/code&gt;）和数据变化时刻（&lt;code&gt;Toggling edge&lt;/code&gt;）截取出来：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="SPI Register" src="./static/SPINorFlash/pics/SPIModes.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;在逻辑分析仪上面的配置有可能稍有些不一样:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="SPI Register" src="./static/SPINorFlash/pics/LA-SPIConfig.png" /&gt;&lt;/p&gt;
+&lt;p&gt;上图是一个虚拟逻辑分析仪软件上的SPI配置截图，除了通道选择和字长度配置外，它还有其他四个设置：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MOSI Samples:如果是方式0和3，那么这里是上升沿，方式1和2应该配置为下降沿。看&lt;a href="./static/SPINorFlash/pics/SPIModes.jpg"&gt;前面的方式说明&lt;/a&gt;图。&lt;/li&gt;
+&lt;li&gt;MISO Samples:SO和SI在同一种方式下采样边缘一般是一样的，因此同上。&lt;/li&gt;
+&lt;li&gt;Use Enable:是否使用CS Pin脚。&lt;/li&gt;
+&lt;li&gt;Enable Active:这个是CS有效时候的电平。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;示例：SPI寄存器配置&lt;/h2&gt;
+&lt;p&gt;在某一个SoC上时钟极性和时钟相位的配置寄存器：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;时钟极性配置（查看前面的4种模式图可以知道模式0和模式1应该是配置为0，另外两种配置为1）：
+&lt;img alt="SPI Register" src="./static/SPINorFlash/pics/SPIRegister-Polarity.png" /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;时钟相位配置（查看前面的&lt;a href="./static/SPINorFlash/pics/SPIModes.jpg"&gt;4种模式图&lt;/a&gt;可以知道模式1和模式3应该是配置为1【第二个edge】，另外两种配置为0）：
+&lt;img alt="SPI Register" src="./static/SPINorFlash/pics/SPIRegister-Phase.png" /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一般除了方式设置外还需要对时钟速度配置，这个配置根据不同的SoC跟踪时钟如何分频过来就可以得出。并且需要注意不要超过Spi-Slave设备的最大速度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;SPI reset配置：&lt;/p&gt;
+&lt;h2&gt;SPI Nor Flash&lt;/h2&gt;
+&lt;p&gt;这里用EN25Q128为例，简略说明一下SPI的配置。这里使用模式0标准SPI模式（只用一根DO线）。&lt;/p&gt;
+&lt;h3&gt;SPI-NorFlash的接线&lt;/h3&gt;
+&lt;p&gt;&lt;img alt="SPI Register" src="./static/SPINorFlash/pics/IC-Connect.png" /&gt;&lt;/p&gt;
+&lt;h3&gt;EN25Q128的SPI方式&lt;/h3&gt;
+&lt;p&gt;EN25Q128支持模式0和模式3。
+&lt;img alt="SPI Register" src="./static/SPINorFlash/pics/SPINorMode.png" /&gt;&lt;/p&gt;
+&lt;h3&gt;逻辑分析仪配置&lt;/h3&gt;
+&lt;p&gt;假设使用的是SPI方式0，那么&lt;code&gt;MOSI Sampling edge&lt;/code&gt;应该设置为&lt;code&gt;Low，MISO Sampling edge&lt;/code&gt;设置为High。&lt;/p&gt;
+&lt;h3&gt;SoC SPI控制寄存器配置&lt;/h3&gt;
+&lt;p&gt;根据前面说过的配置好：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SoC为Master&lt;/li&gt;
+&lt;li&gt;CPHA&lt;/li&gt;
+&lt;li&gt;CPOL&lt;/li&gt;
+&lt;li&gt;Clock Speed(使用标准模式则需要小于80MHz【◆2】)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;配置好后就可以使用逻辑分析仪来协助调试。&lt;/p&gt;
+&lt;h3&gt;使用虚拟逻辑分析仪采集数据示意图&lt;/h3&gt;
+&lt;p&gt;配置采样率和Buf size
+&lt;img alt="Capture" src="./static/SPINorFlash/pics/Capture.jpg" /&gt;&lt;/p&gt;
+&lt;h2&gt;参考&lt;/h2&gt;
+&lt;p&gt;【◆1】 &lt;a href="http://www.corelis.com/education/SPI_Tutorial.htm"&gt;SPI Tutorial&lt;/a&gt; 一个SPI教程。&lt;/p&gt;
+&lt;p&gt;【◆2】 &lt;a href="./static/SPINorFlash/docs/EN25Q128.pdf"&gt;EN25Q128 Datasheet&lt;/a&gt; SPI NorFlash。&lt;/p&gt;
+&lt;p&gt;【◆3】 &lt;a href="./static/SPINorFlash/docs/SPI_Setup_and_Hold_Times.pdf"&gt;SPI Setup and Hold Times&lt;/a&gt; 说明了为何MISO和MOSI分别在上升沿和下降沿采样。&lt;/p&gt;</summary><category term="ES"></category></entry><entry><title>Speed up Booting Embedded System</title><link href="http://tonyho.github.io/Speed%20up%20Booting%20Embedded%20System.html" rel="alternate"></link><updated>2013-10-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2013-10-03:Speed up Booting Embedded System.html</id><summary type="html">&lt;p&gt;嵌入式产品的启动时间一般是一个指标，像大部分Android手机几乎没有为启动加速做过优化，可以改进的地方非常多。当然因为Android用得最多的地方是手机，难得冷启动一次。&lt;/p&gt;
 &lt;p&gt;用户从按下电源键开始，看到&lt;code&gt;boot logo&lt;/code&gt;/&lt;code&gt;boot splash&lt;/code&gt;到出现可操作的Home/App画面，需要的时间越少，自然越好，产品的竞争力也越强。&lt;/p&gt;
 &lt;p&gt;一般没有系统的嵌入式设备启动都是上电即进入正常工作流程，这里只说linux/Android及类似的系统；下面将会简单的说明和列举从启动流程到各个启动过程都可以使用的方法，以及快速启动。&lt;/p&gt;
 &lt;hr /&gt;
@@ -117,32 +193,32 @@
 &lt;h2&gt;☞工具准备：&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;串口行间数据计时工具&lt;a href="http://elinux.org/Grabserial"&gt;&lt;code&gt;Grabserial&lt;/code&gt;&lt;/a&gt;的安装与使用&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;因为依赖python的serial模块，先安装它，在Ubuntu中安装python-serial：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;serial&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;serial&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;获取工具脚本：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="n"&gt;http:&lt;/span&gt;&lt;span class="sr"&gt;//m&lt;/span&gt;&lt;span class="n"&gt;akelinux&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="sr"&gt;/emb/g&lt;/span&gt;&lt;span class="n"&gt;rabserial&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;wget&lt;/span&gt; &lt;span class="n"&gt;http:&lt;/span&gt;&lt;span class="sr"&gt;//m&lt;/span&gt;&lt;span class="n"&gt;akelinux&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="sr"&gt;/emb/g&lt;/span&gt;&lt;span class="n"&gt;rabserial&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;添加可执行权限：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;chmod&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;./&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nb"&gt;chmod&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;./&lt;/span&gt;&lt;span class="n"&gt;grabserial&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;设置以&lt;code&gt;U-boot&lt;/code&gt;字符串出现为基准计时的使用示例：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="sr"&gt;/grabserial  -v -d &amp;quot;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;&lt;span class="s"&gt;&amp;quot; -b 115200 -w 8 -p N -s 1 -e 30 -t -m &amp;quot;&lt;/span&gt;&lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;Boot&lt;/span&gt;&lt;span class="err"&gt;&amp;quot;&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="sr"&gt;/grabserial  -v -d &amp;quot;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;&lt;span class="s"&gt;&amp;quot; -b 115200 -w 8 -p N -s 1 -e 30 -t -m &amp;quot;&lt;/span&gt;&lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;Boot&lt;/span&gt;&lt;span class="err"&gt;&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;如果要同一行内部计时，例如解压kernel的时候是在一行内的，可以使用&lt;code&gt;-i&lt;/code&gt;选项：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$&lt;/span&gt; &lt;span class="err"&gt;../&lt;/span&gt;&lt;span class="nv"&gt;grabserial&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Uncompressing Linux&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;done,&amp;quot;&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$&lt;/span&gt; &lt;span class="err"&gt;../&lt;/span&gt;&lt;span class="nv"&gt;grabserial&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Uncompressing Linux&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;done,&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;我们从MMC出现时开始计时，以下为实例log，其中第一列为从出现指定字符串开始的计时，第二列为与上一行log的间隔：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$sudo&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="sr"&gt;/grabserial  -v -d &amp;quot;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;&lt;span class="s"&gt;&amp;quot; -b 115200 -w 8 -p N -s 1 -e 30 -t -m &amp;quot;&lt;/span&gt;&lt;span class="n"&gt;MMC:&lt;/span&gt;&lt;span class="err"&gt;&amp;quot;&lt;/span&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$sudo&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="sr"&gt;/grabserial  -v -d &amp;quot;/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;&lt;span class="s"&gt;&amp;quot; -b 115200 -w 8 -p N -s 1 -e 30 -t -m &amp;quot;&lt;/span&gt;&lt;span class="n"&gt;MMC:&lt;/span&gt;&lt;span class="err"&gt;&amp;quot;&lt;/span&gt;
 
 &lt;span class="n"&gt;Opening&lt;/span&gt; &lt;span class="n"&gt;serial&lt;/span&gt; &lt;span class="n"&gt;port&lt;/span&gt; &lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;ttyUSB0&lt;/span&gt;
 &lt;span class="mi"&gt;115200&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="n"&gt;N1:xonxoff&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;rtcdtc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
@@ -325,7 +401,7 @@
 &lt;p&gt;有一点需要说明的是：在linux启动过程中会打印BogoMIPS不一定准确。这方面可以参考ARM官方的说明，使用Dhrystone，当然现在在计算能力测试方面，现在大家可能更认可CoreMark和CPU2006，而不是Dhrystone。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;一些外设的测试：&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;SD/eMMC可以使用dd命令来测试，例如一个读写的测试命令示例：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Read&lt;/span&gt;&lt;span class="err"&gt;：&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;dd&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="sr"&gt;/mmcblk0 of=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;null&lt;/span&gt; &lt;span class="n"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4094&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40960&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; 
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;Read&lt;/span&gt;&lt;span class="err"&gt;：&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;dd&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="sr"&gt;/mmcblk0 of=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;null&lt;/span&gt; &lt;span class="n"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4094&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40960&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; 
 &lt;span class="n"&gt;Write&lt;/span&gt;&lt;span class="err"&gt;：&lt;/span&gt;&lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;dd&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="sr"&gt;/dev/&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="sr"&gt;/mmcblk0 if=/&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;zero&lt;/span&gt; &lt;span class="n"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4094&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40960&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -340,36 +416,8 @@
 其中这些参数可以在kernel启动后使用&lt;code&gt;cat /proc/cpuinfo&lt;/code&gt;查看Arch架构。&lt;/p&gt;
 &lt;p&gt;③关于计算方面的测试，有一个不错的文档&lt;a href="http://www.ee.unlv.edu/~meiyang/ecg700/readings/ARM%20Cortex-A8%20vs.%20Intel%20Atom.pdf"&gt;ARM Cortex-A8 vs. Intel Atom&lt;/a&gt;：，里面介绍了4中测试Integer和Float的工具，并用这些工具对Atom和Beagle Bone板子进行的测试比较和说明。另外&lt;a href="http://www.keil.com/benchmarks/"&gt;Keil的这个网页&lt;/a&gt;上对这些测试程序和Item也有一些介绍。&lt;/p&gt;
 &lt;p&gt;④编译与运行可以参考&lt;a href="http://blog.sina.com.cn/s/blog_5d9051c00100dl2z.html"&gt;这个网页的文章&lt;/a&gt;，需要根据直接的板子SoC更改CFLAGS。&lt;/p&gt;
-&lt;hr /&gt;</summary><category term="ES"></category></entry><entry><title>About the blog</title><link href="http://tonyho.github.io/About.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:About.html</id><summary type="html">&lt;h2&gt;欢迎使用 MarkdownPad 2&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;MarkdownPad&lt;/strong&gt; 是 Windows 平台上一个功能完善的 Markdown 编辑器。&lt;/p&gt;
-&lt;h3&gt;专为 Markdown 打造&lt;/h3&gt;
-&lt;p&gt;提供了语法高亮和方便的快捷键功能，给您最好的 Markdown 编写体验。&lt;/p&gt;
-&lt;p&gt;来试一下：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;粗体&lt;/strong&gt; (&lt;code&gt;Ctrl+B&lt;/code&gt;) and &lt;em&gt;斜体&lt;/em&gt; (&lt;code&gt;Ctrl+I&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;引用 (&lt;code&gt;Ctrl+Q&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;代码块 (&lt;code&gt;Ctrl+K&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;标题 1, 2, 3 (&lt;code&gt;Ctrl+1&lt;/code&gt;, &lt;code&gt;Ctrl+2&lt;/code&gt;, &lt;code&gt;Ctrl+3&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;列表 (&lt;code&gt;Ctrl+U&lt;/code&gt; and &lt;code&gt;Ctrl+Shift+O&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3&gt;实时预览，所见即所得&lt;/h3&gt;
-&lt;p&gt;无需猜测您的 &lt;a href="http://markdownpad.com"&gt;语法&lt;/a&gt; 是否正确；每当您敲击键盘，实时预览功能都会立刻准确呈现出文档的显示效果。&lt;/p&gt;
-&lt;h3&gt;自由定制&lt;/h3&gt;
-&lt;p&gt;100% 可自定义的字体、配色、布局和样式，让您可以将 MarkdownPad 配置的得心应手。&lt;/p&gt;
-&lt;h3&gt;为高级用户而设计的稳定的 Markdown 编辑器&lt;/h3&gt;
-&lt;p&gt;MarkdownPad 支持多种 Markdown 解析引擎，包括 标准 Markdown 、 Markdown 扩展 (包括表格支持) 以及 GitHub 风格 Markdown 。&lt;/p&gt;
-&lt;p&gt;有了标签式多文档界面、PDF 导出、内置的图片上传工具、会话管理、拼写检查、自动保存、语法高亮以及内置的 CSS 管理器，您可以随心所欲地使用 MarkdownPad。&lt;/p&gt;</summary><category term="blog"></category></entry><entry><title>For time test</title><link href="http://tonyho.github.io/Test-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:Test-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="nb"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="ES"></category></entry><entry><title>Third time test</title><link href="http://tonyho.github.io/Third-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:Third-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="nb"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="ES"></category></entry><entry><title>Second time test</title><link href="http://tonyho.github.io/test-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:test-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;hr /&gt;</summary><category term="ES"></category></entry><entry><title>Second time test</title><link href="http://tonyho.github.io/test-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:test-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="nb"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
