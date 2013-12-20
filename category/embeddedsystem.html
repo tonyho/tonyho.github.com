@@ -58,6 +58,55 @@
         <div class="span9" id="content">
                     
 		<div class='article well'><small>
+		<h1 class="small"><a href="../Linux设备驱动开发基础之互斥与同步基础.html">Linux设备驱动开发基础之互斥与同步基础</a></h1>
+		<div class="small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2014-01-10T00:00:00">
+	<i class="icon-calendar"></i>Fri 10 January 2014
+</abbr>
+<span class="label">By</span>
+<a href="../author/tonyho.html"><i class="icon-user"></i>TonyHo</a>
+<span class="label">Category</span>
+<a href="../category/embeddedsystem.html"><i class="icon-folder-open"></i>EmbeddedSystem</a>. 
+
+	
+<span class="label">Tags</span> 
+	<a href="../tag/es.html"><i class="icon-tag"></i>ES</a>
+	<a href="../tag/ldd.html"><i class="icon-tag"></i>LDD</a>
+</footer><!-- /.post-info --></div>
+		<div class="summary small"><h1>Linux设备驱动开发基础之互斥与同步基础</h1>
+<h2>一些概念</h2>
+<ol>
+<li>竟态：多个执行路径对同一资源进行操作时可能引发的资源混乱行为（①）。执行路径为并发源。</li>
+<li>临界区：对共享资源的访问代码片段。临界区只能是在一个进程内部而无法跨进程，因为其不是一个对象，我们无法定义一个临界区对象来告知其他进程，而像Mutex和SpinLock都可以。参考<a href="http://blogs.msdn.com/b/larryosterman/archive/2005/08/24/455741.aspx?Redirected=true">这篇文章</a>。</li>
+<li>中断和抢占：一般都是在中断需要返回前会调用重新调度函数，如果没有禁止抢占，那么就会被高优先级的进程抢占。有的地方可以被中断但是进程必须不被抢占，那么只需要禁止抢占就行了。例如spin_lock是可以被中断的，但是不能被抢占,因为被其他进程抢占后会造成死锁。当然因为中断中也可能要去获得这个锁而造成死锁，这个就是spin_lock_irq的来由。</li>
+</ol>
+<h2>原子操作与原子变量</h2>
+<ul>
+<li>原子操作：每一步都是不可分割的。</li>
+<li>原子变量：对此变量的操作（增加或者减小）是原子操作。</li>
+</ul>
+<p><code>单核处理器+抢占</code> 与 <code>多核处理器</code>在许多发面有类似的特性。</p>
+<h2>并发的来源</h2>
+<ol>
+<li>中断</li>
+<li>调度器的可抢占性</li>
+<li>多核、多处理器的并发执行</li>
+</ol>
+<h4>中断</h4>
+<p>一般对于本地CPU（就是此刻运行这个代码的CPU或者CPU核），控制其中断使用的函数是：</p>
+<ul>
+<li>local_irq_enable</li>
+<li>local_irq_disable</li>
+</ul>
+<h4>调度器的可抢占性</h4>
+<p>调度器的控制函数 ...</p> 
+			<a class="btn primary xsmall" href="../Linux设备驱动开发基础之互斥与同步基础.html">more ...</a>
+		</div>
+	</small>
+	</div>	
+	<hr />
+		<div class='article well'><small>
 		<h1 class="small"><a href="../Linux MemoryManagement.html">Linux驱动开发之内存管理基础</a></h1>
 		<div class="small"><footer class="post-info">
 <span class="label">Date</span>
@@ -266,12 +315,12 @@
 		<i class="icon-tag icon-large"></i>MemoryManagement
 	</a>
 </span>
-<span class="tag-4">
+<span class="tag-2">
 	<a href="../tag/LDD.html">
 		<i class="icon-tag icon-large"></i>LDD
 	</a>
 </span>
-<span class="tag-1">
+<span class="tag-0">
 	<a href="../tag/ES.html">
 		<i class="icon-tag icon-large"></i>ES
 	</a>

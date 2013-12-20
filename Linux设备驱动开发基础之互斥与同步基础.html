@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>SPI Nor Flash</title>
+    <title>Linux设备驱动开发基础之互斥与同步基础</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -62,8 +62,8 @@
 			<h1>
 				<a href=""
 					rel="bookmark" 
-					title="Permalink to SPI Nor Flash">
-					SPI Nor Flash 
+					title="Permalink to Linux设备驱动开发基础之互斥与同步基础">
+					Linux设备驱动开发基础之互斥与同步基础 
 				</a>
 				 
 			</h1> 
@@ -72,8 +72,8 @@
 		<div class="well">
 			<footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2013-11-24T00:00:00">
-	<i class="icon-calendar"></i>Sun 24 November 2013
+<abbr class="published" title="2014-01-10T00:00:00">
+	<i class="icon-calendar"></i>Fri 10 January 2014
 </abbr>
 <span class="label">By</span>
 <a href="./author/tonyho.html"><i class="icon-user"></i>TonyHo</a>
@@ -83,90 +83,176 @@
 	
 <span class="label">Tags</span> 
 	<a href="./tag/es.html"><i class="icon-tag"></i>ES</a>
+	<a href="./tag/ldd.html"><i class="icon-tag"></i>LDD</a>
 </footer><!-- /.post-info -->		</div>
-		<h2>SPI协议</h2>
-<h3>Slave与Master</h3>
-<p>一般而言，提供clock的一方称为master。如下图（7-1）中的SCLK方向可知：Processor为master，而Peripheral为slave。</p>
-<h3>SPI设备接口</h3>
-<p>SPI uses four main signals:</p>
+		<h1>Linux设备驱动开发基础之互斥与同步基础</h1>
+<h2>一些概念</h2>
+<ol>
+<li>竟态：多个执行路径对同一资源进行操作时可能引发的资源混乱行为（①）。执行路径为并发源。</li>
+<li>临界区：对共享资源的访问代码片段。临界区只能是在一个进程内部而无法跨进程，因为其不是一个对象，我们无法定义一个临界区对象来告知其他进程，而像Mutex和SpinLock都可以。参考<a href="http://blogs.msdn.com/b/larryosterman/archive/2005/08/24/455741.aspx?Redirected=true">这篇文章</a>。</li>
+<li>中断和抢占：一般都是在中断需要返回前会调用重新调度函数，如果没有禁止抢占，那么就会被高优先级的进程抢占。有的地方可以被中断但是进程必须不被抢占，那么只需要禁止抢占就行了。例如spin_lock是可以被中断的，但是不能被抢占,因为被其他进程抢占后会造成死锁。当然因为中断中也可能要去获得这个锁而造成死锁，这个就是spin_lock_irq的来由。</li>
+</ol>
+<h2>原子操作与原子变量</h2>
 <ul>
-<li>Master Out Slave In (MOSI)</li>
-<li>Master In Slave Out (MISO)</li>
-<li>Serial CLocK (SCLK or SCK) and Chip Select (CS) for the peripheral.</li>
-<li>Some processors have a dedicated chip select for SPI interfacing called Slave Select (SS).</li>
+<li>原子操作：每一步都是不可分割的。</li>
+<li>原子变量：对此变量的操作（增加或者减小）是原子操作。</li>
 </ul>
-<p><img alt="SPI Interface" src="./static/SPINorFlash/pics/SPI-Interface.png" /></p>
-<h3>SPI传输</h3>
-<p>SPI使用移位寄存器方式传输，示意图：</p>
-<p><img alt="SPI transmission" src="./static/SPINorFlash/pics/SPITransmission.png" /></p>
-<p>形成一个<code>循环圈</code>，任何时刻对于一个SPI设备而言都有移位输入和移位输出。</p>
-<p>如果想只读或者只写，那么在读的时候需要发送一个<code>dummy byte</code>从而产生时钟；在写的时候简单的忽略读到的数据就可以了。</p>
-<h3>SPI传输的四种方式</h3>
-<p>根据<code>时钟极性</code>和<code>时钟相位</code>的不同共有四种，时钟极性和相位分别指：</p>
+<p><code>单核处理器+抢占</code> 与 <code>多核处理器</code>在许多发面有类似的特性。</p>
+<h2>并发的来源</h2>
+<ol>
+<li>中断</li>
+<li>调度器的可抢占性</li>
+<li>多核、多处理器的并发执行</li>
+</ol>
+<h4>中断</h4>
+<p>一般对于本地CPU（就是此刻运行这个代码的CPU或者CPU核），控制其中断使用的函数是：</p>
 <ul>
-<li>时钟极性(CPOL-Clock Polarity)：空闲时的极性高（<code>polarity high</code>）或者低（<code>polarity low</code>）。</li>
-<li>时钟相位(CPHA-CLock Phase)：在上升沿还是下降沿采样数据。</li>
+<li>local_irq_enable</li>
+<li>local_irq_disable</li>
 </ul>
-<p>四种模式用图说明如下：</p>
-<p><img alt="SPI Register" src="./static/SPINorFlash/pics/spi-bus-timing.jpg" /></p>
-<p>将四种模式的采样时刻（<code>Sampling edge</code>）和数据变化时刻（<code>Toggling edge</code>）截取出来：</p>
-<p><img alt="SPI Register" src="./static/SPINorFlash/pics/SPIModes.jpg" /></p>
-<p>在逻辑分析仪上面的配置有可能稍有些不一样:</p>
-<p><img alt="SPI Register" src="./static/SPINorFlash/pics/LA-SPIConfig.png" /></p>
-<p>上图是一个虚拟逻辑分析仪软件上的SPI配置截图，除了通道选择和字长度配置外，它还有其他四个设置：</p>
+<h4>调度器的可抢占性</h4>
+<p>调度器的控制函数：</p>
 <ul>
-<li>MOSI Samples:如果是方式0和3，那么这里是上升沿，方式1和2应该配置为下降沿。看<a href="./static/SPINorFlash/pics/SPIModes.jpg">前面的方式说明</a>图。</li>
-<li>MISO Samples:SO和SI在同一种方式下采样边缘一般是一样的，因此同上。</li>
-<li>Use Enable:是否使用CS Pin脚。</li>
-<li>Enable Active:这个是CS有效时候的电平。</li>
+<li>preempt_disable</li>
+<li>preempt_enable</li>
 </ul>
-<h2>示例：SPI寄存器配置</h2>
-<p>在某一个SoC上时钟极性和时钟相位的配置寄存器：</p>
-<ul>
+<h4>多核、多处理器的并发执行</h4>
+<p>以上是并发的来源，而下面的方法都是对并发的处理和控制，因此都是<strong>全局的</strong>。</p>
+<h2>自旋锁=禁止抢占+原子设置V变量</h2>
+<h4>特征</h4>
+<ol>
+<li>对于spin_lock用得比较多的是对全局变量访问时的保护</li>
+<li>spin_lock是全局的</li>
+<li>普通的自旋锁(没有disable_IRQ)有可能会死锁</li>
+</ol>
+<h4>自旋锁和信号量的区别</h4>
+<h6>是否会引发睡眠</h6>
+<p>自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，调用者就一直循环
+查看是否该自旋锁的保持者已经释放了锁，“自旋”就是“在原地打转”。而信号量则引起调
+用者睡眠，它把进程从运行队列上拖出去，除非获得锁。</p>
+<p>spin_lock，禁止抢占，并且用一个变量来指明资源是否真正被使用。</p>
+<h6>是否会造成死锁</h6>
+<p>spin_lock因为没有禁止中断，所以有可能出现死锁</p>
+<blockquote>
+<p>在A进程用自旋锁锁住并使用资源B，处于临界区中，接着被中断，而中断中又去尝试使用资源B，这将造成死锁</p>
+</blockquote>
+<h5>spin_lock的组成和原理</h5>
+<p>spin 结构体中里面有个变量，这个变量在spin_lock中被原子改变。因此其他地方再去spin_lock的时候会发现这个变量已经改变，表明锁已经被使用了，此时将在这里自旋等待。</p>
+<h5>spin_lock_irq(Save)变体</h5>
+<ol>
 <li>
-<p>时钟极性配置（查看前面的4种模式图可以知道模式0和模式1应该是配置为0，另外两种配置为1）：
-<img alt="SPI Register" src="./static/SPINorFlash/pics/SPIRegister-Polarity.png" /></p>
-</li>
+<p>spin_lock_irq</p>
+<div class="codehilite"><pre><span class="n">spin_lock_irq</span><span class="p">(</span><span class="n">Save</span><span class="p">)</span><span class="o">=</span><span class="n">spin_lock</span> <span class="o">+</span> <span class="n">disableIRQ</span>
+</pre></div>
+
+
+<p>而普通的spin_lock为</p>
+<div class="codehilite"><pre><span class="n">spin_lock</span><span class="o">=</span><span class="err">原子设置</span><span class="n">V</span> <span class="o">+</span> <span class="n">preempt_disable</span>
+</pre></div>
+
+
+<p>这个使得就解决了上面因为中断而造成的死锁的可能性。
+2. spin_lock_bh</p>
+<div class="codehilite"><pre><span class="n">disable</span> <span class="n">softIRQ</span>
+</pre></div>
+
+
+<ol>
 <li>
-<p>时钟相位配置（查看前面的<a href="./static/SPINorFlash/pics/SPIModes.jpg">4种模式图</a>可以知道模式1和模式3应该是配置为1【第二个edge】，另外两种配置为0）：
-<img alt="SPI Register" src="./static/SPINorFlash/pics/SPIRegister-Phase.png" /></p>
+<p>非阻塞版本</p>
+<p>spin_trylock：try</p>
+<h5>spin_lock_irq使用注意</h5>
+<ol>
+<li>任何拥有自旋锁的代码都必须是原子的，不能休眠：例如kmalloc中有GFP_KERNEL掩码时，将有可能造成休眠</li>
+<li>在中断中如果要使用自旋锁应该使用<code>spin_lock_irq</code>。</li>
+</ol>
+<h2>信号量</h2>
+<h4>特点</h4>
+<p>允许调用它的进程进入睡眠放入到wait_list中，见下面的结构体成员。</p>
+<h4>原理</h4>
+<div class="codehilite"><pre><span class="sr">/* Please don&#39;t access any members of this structure directly */</span>
+<span class="n">struct</span> <span class="n">semaphore</span> <span class="p">{</span>
+</pre></div>
+
+
+<p>spinlock_t      lock;
+unsigned int        count;
+struct list_head    wait_list;
+    };
+1. lock：一个自旋锁用于对count变量的原子更改。
+1. count：记录资源数目。
+1. wait_list：将无法获取信号量的进程放入队列中。</p>
+<h4>操作</h4>
+<ol>
+<li>DOWN:</li>
+<li>count--</li>
+<li>UP:</li>
+</ol>
+<p>count++;唤醒在wait_list中的等待进程</p>
+<h4>UP/DOWN的变体</h4>
+<ol>
+<li>down：等待的进程无法被（Ctrl+D）中断,将阻塞在down中。</li>
+<li>down_interruptible：等待的进程可以被中断，需要检查返回值以确定究竟是什么原因导致的返回。</li>
+<li>down_trylock：如果无法获取信号量则直接返回而不是进入休眠。</li>
+<li>up函数只有一个。</li>
+</ol>
+<h2>互斥锁</h2>
+<h4>构成</h4>
+<div class="codehilite"><pre><span class="n">struct</span> <span class="n">mutex</span> <span class="p">{</span>
+</pre></div>
+
+
+<p>/<em> 1: unlocked, 0: locked, negative: locked, possible waiters </em>/
+atomic_t        count;
+spinlock_t      wait_lock;
+struct list_head    wait_list;
+    #if defined(CONFIG_DEBUG_MUTEXES) || defined(CONFIG_SMP)
+struct task_struct  <em>owner;
+    #endif
+    #ifdef CONFIG_DEBUG_MUTEXES
+const char      </em>name;
+void            *magic;
+    #endif
+    #ifdef CONFIG_DEBUG_LOCK_ALLOC
+struct lockdep_map  dep_map;
+    #endif
+    };
+精简一下就是：</p>
 </li>
-<li>
-<p>一般除了方式设置外还需要对时钟速度配置，这个配置根据不同的SoC跟踪时钟如何分频过来就可以得出。并且需要注意不要超过Spi-Slave设备的最大速度。</p>
+</ol>
+<p>struct mutex {
+    /<em> 1: unlocked, 0: locked, negative: locked, possible waiters </em>/
+    atomic_t        count;
+    spinlock_t      wait_lock;
+    struct list_head    wait_list;
+};
+与上面的semophore相比，就是count的类型从<code>unsigned int</code>编程了<code>atomic_t</code>,且用1表示没有被锁，0表示锁了。而semophore里面的count则是用来表示可以获取资源的数目。互斥锁就是用来表示一个进程可以获取资源的。</p>
+<h4>操作</h4>
+<p>与semophore一致有UP和DOWN。</p>
 </li>
-</ul>
-<p>SPI reset配置：</p>
-<h2>SPI Nor Flash</h2>
-<p>这里用EN25Q128为例，简略说明一下SPI的配置。这里使用模式0标准SPI模式（只用一根DO线）。</p>
-<h3>SPI-NorFlash的接线</h3>
-<p><img alt="SPI Register" src="./static/SPINorFlash/pics/IC-Connect.png" /></p>
-<h3>EN25Q128的SPI方式</h3>
-<p>EN25Q128支持模式0和模式3。
-<img alt="SPI Register" src="./static/SPINorFlash/pics/SPINorMode.png" /></p>
-<h3>逻辑分析仪配置</h3>
-<p>假设使用的是SPI方式0，那么<code>MOSI Sampling edge</code>应该设置为<code>Low，MISO Sampling edge</code>设置为High。</p>
-<h3>SoC SPI控制寄存器配置</h3>
-<p>根据前面说过的配置好：</p>
+</ol>
+<h2>免锁机制RCU：</h2>
+<div class="codehilite"><pre><span class="n">RCU</span> <span class="o">=</span> <span class="n">preempt_disable</span> <span class="o">+</span> <span class="err">每次写都分配一个新空间</span>
+</pre></div>
+
+
+<h4>免锁的代价：规则约定</h4>
+<p>必须在临界区读。</p>
+<h4>RCU实现机制</h4>
 <ul>
-<li>SoC为Master</li>
-<li>CPHA</li>
-<li>CPOL</li>
-<li>Clock Speed(使用标准模式则需要小于80MHz【◆2】)</li>
+<li>写：先重新分配的一个地方，得到一个指针New，然后写进去，接着将这个new指针替换掉指向老数据的老指针Old。这样子完成了数据的刷新。当然指针的替换是原子操作的。最后还需要注册一个回调函数，使得所有对old指针的引用都完成后，用于释放以前分区的空间。</li>
+<li>释放旧空间：如果只有一个访问，那么读取者的临界区的出口其实就是这个回调函数调用的时机，因为读取者能且仅能在临界区引用指针，但是一个系统很可能有多个CPU运行多个线程去读取和引用old指针，所以当<strong>所有的CPU的发生过一次调度后</strong>（就是绝对不可能在临界区，因为临界区关闭了调度），就可以认为是对老指针引用的完毕。</li>
+<li>读：构建一个临界区，<strong>并在且只在</strong>临界区内使用指针访问数据。构建临界区的原因是防止在使用指针访问的时候数据被写。</li>
 </ul>
-<p>配置好后就可以使用逻辑分析仪来协助调试。</p>
-<h3>使用虚拟逻辑分析仪采集数据示意图</h3>
-<p>配置采样率和Buf size
-<img alt="Capture" src="./static/SPINorFlash/pics/Capture.jpg" /></p>
 <h2>参考</h2>
-<p>【◆1】 <a href="http://www.corelis.com/education/SPI_Tutorial.htm">SPI Tutorial</a> 一个SPI教程。</p>
-<p>【◆2】 <a href="./static/SPINorFlash/docs/EN25Q128.pdf">EN25Q128 Datasheet</a> SPI NorFlash。</p>
-<p>【◆3】 <a href="./static/SPINorFlash/docs/SPI_Setup_and_Hold_Times.pdf">SPI Setup and Hold Times</a> 说明了为何MISO和MOSI分别在上升沿和下降沿采样。</p>
+<p>①来源于深入Linux设备驱动程序内核机制</p>
+<p>②<a href="http://blogs.msdn.com/b/larryosterman/archive/2005/08/24/455741.aspx?Redirected=true">Why don't critical sections work cross process?</a></p>
 		</div><!-- /.entry-content -->
 				<div class="comments">
 		<h2>Comments !</h2>
 			<div id="disqus_thread"></div>
 			<script type="text/javascript">
-			   var disqus_identifier = "SPI Nor Flash.html";
+			   var disqus_identifier = "Linux设备驱动开发基础之互斥与同步基础.html";
 			   (function() {
 				var dsq = document.createElement('script'); 
 				dsq.type = 'text/javascript'; dsq.async = true;
