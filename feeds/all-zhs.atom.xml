@@ -119,7 +119,7 @@
 &lt;p&gt;&lt;img alt="SPI Interface" src="./static/SPINorFlash/pics/SPI-Interface.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;SPI传输&lt;/h3&gt;
 &lt;p&gt;SPI使用移位寄存器方式传输，示意图：&lt;/p&gt;
-&lt;p&gt;&lt;img alt="SPI transmission" src="./static/pics/SPITransmission.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="SPI transmission" src="./static/SPINorFlash/pics/SPITransmission.png" /&gt;&lt;/p&gt;
 &lt;p&gt;形成一个&lt;code&gt;循环圈&lt;/code&gt;，任何时刻对于一个SPI设备而言都有移位输入和移位输出。&lt;/p&gt;
 &lt;p&gt;如果想只读或者只写，那么在读的时候需要发送一个&lt;code&gt;dummy byte&lt;/code&gt;从而产生时钟；在写的时候简单的忽略读到的数据就可以了。&lt;/p&gt;
 &lt;h3&gt;SPI传输的四种方式&lt;/h3&gt;
