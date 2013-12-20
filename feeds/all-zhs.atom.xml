@@ -551,9 +551,4 @@ alloc_pages的原型如下：&lt;/p&gt;
 其中这些参数可以在kernel启动后使用&lt;code&gt;cat /proc/cpuinfo&lt;/code&gt;查看Arch架构。&lt;/p&gt;
 &lt;p&gt;③关于计算方面的测试，有一个不错的文档&lt;a href="http://www.ee.unlv.edu/~meiyang/ecg700/readings/ARM%20Cortex-A8%20vs.%20Intel%20Atom.pdf"&gt;ARM Cortex-A8 vs. Intel Atom&lt;/a&gt;：，里面介绍了4中测试Integer和Float的工具，并用这些工具对Atom和Beagle Bone板子进行的测试比较和说明。另外&lt;a href="http://www.keil.com/benchmarks/"&gt;Keil的这个网页&lt;/a&gt;上对这些测试程序和Item也有一些介绍。&lt;/p&gt;
 &lt;p&gt;④编译与运行可以参考&lt;a href="http://blog.sina.com.cn/s/blog_5d9051c00100dl2z.html"&gt;这个网页的文章&lt;/a&gt;，需要根据直接的板子SoC更改CFLAGS。&lt;/p&gt;
-&lt;hr /&gt;</summary><category term="ES"></category></entry><entry><title>Second time test</title><link href="http://tonyho.github.io/test-blog.html" rel="alternate"></link><updated>2010-12-03T00:00:00+08:00</updated><author><name>TonyHo</name></author><id>tag:tonyho.github.io,2010-12-03:test-blog.html</id><summary type="html">&lt;p&gt;Hi here is the work.&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="nb"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;boy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="blog"></category></entry></feed>
+&lt;hr /&gt;</summary><category term="ES"></category></entry></feed>
