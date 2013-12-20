@@ -89,6 +89,55 @@
 	</div>	
 	<hr />
 		<div class='article well'><small>
+		<h1 class="small"><a href="../Linux MemoryManagement.html">Linux驱动开发之内存管理基础</a></h1>
+		<div class="small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-12-30T00:00:00">
+	<i class="icon-calendar"></i>Mon 30 December 2013
+</abbr>
+<span class="label">By</span>
+<a href="../author/tonyho.html"><i class="icon-user"></i>TonyHo</a>
+<span class="label">Category</span>
+<a href="../category/embeddedsystem.html"><i class="icon-folder-open"></i>EmbeddedSystem</a>. 
+
+	
+<span class="label">Tags</span> 
+	<a href="../tag/es.html"><i class="icon-tag"></i>ES</a>
+	<a href="../tag/ldd.html"><i class="icon-tag"></i>LDD</a>
+	<a href="../tag/memorymanagement.html"><i class="icon-tag"></i>MemoryManagement</a>
+</footer><!-- /.post-info --></div>
+		<div class="summary small"><p>内存管理主要分为：</p>
+<ol>
+<li>物理内存管理</li>
+<li>虚拟内存管理</li>
+</ol>
+<h2>物理内存管理</h2>
+<h3>页</h3>
+<p>物理内存以页（<code>page frame</code>）为单位，一般为4K，如果是4G的内存那么，将会有一个大小为<code>4G/4K=1M</code>的数组<code>mem_map</code>，每一项保存着每一页的地址。</p>
+<h3>Zone</h3>
+<p>Zone是一些连续物理页的合集，参看下面的图3-2。将物理页分成了3个Zone区：</p>
+<ol>
+<li>ZONE_HIGHMEM：物理内存高于896M的区域</li>
+<li>ZONE_NORMAL：常规内存区域，如果DMA可以在此区域做内存访问，也可以使用这块区域</li>
+<li>ZONE_DMA：0~nM，不同的架构和不同的芯片都可能不一样</li>
+</ol>
+<p>因为数组mem_map与物理页对应，因此mem_map也被默认分为了上面三个区域。</p>
+<h3>内存节点</h3>
+<p>分为两种：</p>
+<ol>
+<li>UMA：只有一个内存节点，CPU访问内存的内存的任何地址的速度是一样的。</li>
+<li>NUMA：多<code>个</code>处理器，每个处理器都有自己的本地内存，通过总线通讯。访问本地内存比访问其他节点的内存快。</li>
+</ol>
+<h2>物理页面分配器：伙伴系统</h2>
+<h3>伙伴系统的特征与作用：</h3>
+<ol>
+<li>使用物理页为单位 ...</li></ol> 
+			<a class="btn primary xsmall" href="../Linux MemoryManagement.html">more ...</a>
+		</div>
+	</small>
+	</div>	
+	<hr />
+		<div class='article well'><small>
 		<h1 class="small"><a href="../SPI Nor Flash.html">SPI Nor Flash</a></h1>
 		<div class="small"><footer class="post-info">
 <span class="label">Date</span>
@@ -250,6 +299,11 @@
 
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 <span class="tag-4">
+	<a href="../tag/MemoryManagement.html">
+		<i class="icon-tag icon-large"></i>MemoryManagement
+	</a>
+</span>
+<span class="tag-4">
 	<a href="../tag/blog.html">
 		<i class="icon-tag icon-large"></i>blog
 	</a>
@@ -257,6 +311,11 @@
 <span class="tag-1">
 	<a href="../tag/ES.html">
 		<i class="icon-tag icon-large"></i>ES
+	</a>
+</span>
+<span class="tag-4">
+	<a href="../tag/LDD.html">
+		<i class="icon-tag icon-large"></i>LDD
 	</a>
 </span>
 
