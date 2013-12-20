@@ -18,7 +18,7 @@ SPI uses four main signals:
 ###SPI传输
 SPI使用移位寄存器方式传输，示意图：
 
-![SPI transmission](./static/pics/SPITransmission.png)
+![SPI transmission](./static/SPINorFlash/pics/SPITransmission.png)
 
 形成一个`循环圈`，任何时刻对于一个SPI设备而言都有移位输入和移位输出。
 
