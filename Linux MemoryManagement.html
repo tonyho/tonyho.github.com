@@ -5,21 +5,49 @@
     <title>Linux驱动开发之内存管理基础</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="">
-  <!-- Le styles -->
-  <link href="./theme/css/html4css1.css" rel="stylesheet">
-  <link rel="stylesheet" href="./theme/css/bootstrap.css" type="text/css" />
-  <link href="./theme/css/bootstrap-responsive.css" rel="stylesheet">
-  <link href="./theme/css/font-awesome.css" rel="stylesheet">
-  <link href="./theme/css/pygments.css" rel="stylesheet">
-  <link href="./theme/css/local.css" rel="stylesheet">
-  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+    <meta name="author" content="TonyHo">
 
-  <link href="./" type="application/atom+xml" rel="alternate" title="美是美的创造者 ATOM Feed" />
-  
+    <!-- Le styles -->
+    <link rel="stylesheet" href="http://tonyho.github.io/theme/css/bootstrap.dark.css" type="text/css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .tag-1 {
+        font-size: 13pt;
+      }
+      .tag-2 {
+        font-size: 10pt;
+      }
+      .tag-2 {
+        font-size: 8pt;
+      }
+      .tag-4 {
+        font-size: 6pt;
+     }
+    </style>
+    <link href="http://tonyho.github.io/theme/css/bootstrap-responsive.dark.css" rel="stylesheet">
+        <link href="http://tonyho.github.io/theme/css/font-awesome.css" rel="stylesheet">
+
+    <link href="http://tonyho.github.io/theme/css/pygments.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="http://tonyho.github.io/theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href="http://tonyho.github.io/theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://tonyho.github.io/theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://tonyho.github.io/theme/images/apple-touch-icon-114x114.png">
+
+    <link href="http://tonyho.github.io/" type="application/atom+xml" rel="alternate" title="美是美的创造者 ATOM Feed" />
+
   </head>
 
   <body>
@@ -27,25 +55,25 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <!--<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </a>-->
-          <a class="brand" href="./index.html">美是美的创造者 </a>
-          <div class="fcnav-collapse">
+          </a>
+          <a class="brand" href="http://tonyho.github.io/index.html">美是美的创造者 </a>
+          <div class="nav-collapse">
             <ul class="nav">
-                                          			  <li class="divider-vertical"></li>
-                                              <li class="active">
-                    <a href="./category/EmbeddedSystem.html">
+                          <li class="divider-vertical"></li>
+                  <li class="active">
+                    <a href="http://tonyho.github.io/category/embeddedsystem.html">
 						<i class="icon-folder-open icon-large"></i>EmbeddedSystem
 					</a>
                   </li>
-              			  
-			  <ul class="nav pull-right">
-				<li><a href="./archives.html"><i class="icon-th-list"></i>Archives</a></li>
-			  </ul>
-			  
+
+                          <ul class="nav pull-right">
+                                <li><a href="http://tonyho.github.io/archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                          </ul>
+
             </ul>
             <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>-->
           </div><!--/.nav-collapse -->
@@ -54,39 +82,38 @@
     </div>
 
     <div class="container-fluid">
-      <div class="row-fluid">
+      <div class="row">
         <div class="span9" id="content">
-            <section id="content">    
-	<article>
-		<header>
-			<h1>
-				<a href=""
-					rel="bookmark" 
-					title="Permalink to Linux驱动开发之内存管理基础">
-					Linux驱动开发之内存管理基础 
-				</a>
-				 
-			</h1> 
-		</header>
-		<div class="entry-content">
-		<div class="well">
-			<footer class="post-info">
+<section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to Linux驱动开发之内存管理基础">
+                                        Linux驱动开发之内存管理基础
+                                </a>
+                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+<footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2013-12-30T00:00:00">
-	<i class="icon-calendar"></i>Mon 30 December 2013
+        <i class="icon-calendar"></i>Mon 30 December 2013
 </abbr>
 <span class="label">By</span>
-<a href="./author/tonyho.html"><i class="icon-user"></i>TonyHo</a>
+<a href="http://tonyho.github.io/author/tonyho.html"><i class="icon-user"></i>TonyHo</a>
 <span class="label">Category</span>
-<a href="./category/embeddedsystem.html"><i class="icon-folder-open"></i>EmbeddedSystem</a>. 
+<a href="http://tonyho.github.io/category/embeddedsystem.html"><i class="icon-folder-open"></i>EmbeddedSystem</a>.
 
-	
-<span class="label">Tags</span> 
-	<a href="./tag/es.html"><i class="icon-tag"></i>ES</a>
-	<a href="./tag/ldd.html"><i class="icon-tag"></i>LDD</a>
-	<a href="./tag/memorymanagement.html"><i class="icon-tag"></i>MemoryManagement</a>
-</footer><!-- /.post-info -->		</div>
-		<p>内存管理主要分为：</p>
+
+<span class="label">Tags</span>
+	<a href="http://tonyho.github.io/tag/es.html"><i class="icon-tag"></i>ES</a>
+	<a href="http://tonyho.github.io/tag/ldd.html"><i class="icon-tag"></i>LDD</a>
+	<a href="http://tonyho.github.io/tag/memorymanagement.html"><i class="icon-tag"></i>MemoryManagement</a>
+</footer><!-- /.post-info -->                </div>
+                <p>内存管理主要分为：</p>
 <ol>
 <li>物理内存管理</li>
 <li>虚拟内存管理</li>
@@ -120,7 +147,7 @@
 <h3>gfp_mask</h3>
 <p>要指定分配哪个ZONE的物理页，以及分配时的行为是由<code>gfp_mask</code>（gfp：Get free page）掩码的不同组合成的flag来决定的。
 对于分配到哪个区域的掩码定义有：</p>
-<div class="codehilite"><pre><span class="c">#define __GFP_DMA   ((__force gfp_t)___GFP_DMA)</span>
+<div class="highlight"><pre><span class="c">#define __GFP_DMA   ((__force gfp_t)___GFP_DMA)</span>
 <span class="c">#define __GFP_HIGHMEM   ((__force gfp_t)___GFP_HIGHMEM)</span>
 <span class="c">#define __GFP_DMA32 ((__force gfp_t)___GFP_DMA32)</span>
 <span class="c">#define __GFP_MOVABLE   ((__force gfp_t)___GFP_MOVABLE) </span>
@@ -131,7 +158,7 @@
 <p>如果不指定，默认是分配在<code>ZONE_NORMAL</code>区域。当然以<code>__</code>开头指明这些宏是在头文件内部使用，kernel还定义了以这些为基础的宏，在驱动中应该使用这些进一步包装的宏：
 1. __GFP_NORMAL：在ZONE_NORMAL区域分配，如果</p>
 <p>另外还有几个常用的mask：</p>
-<div class="codehilite"><pre><span class="c">#define GFP_ATOMIC  (__GFP_HIGH)</span>
+<div class="highlight"><pre><span class="c">#define GFP_ATOMIC  (__GFP_HIGH)</span>
 <span class="c">#define GFP_KERNEL  (__GFP_WAIT | __GFP_IO | __GFP_FS)</span>
 </pre></div>
 
@@ -154,18 +181,18 @@
 <p>两个函数最终都是调用<code>alloc_pages_node</code>。</p>
 <h4>alloc_pages与free_pages</h4>
 <p><a href="http://hi.baidu.com/tonyhoaspire/item/7a952ec8cbd84c65f7c95d04">这里</a>有一个使用此函数的例子。加载这个例子的模块有可能会出现问题：</p>
-<div class="codehilite"><pre><span class="n">Unknown</span> <span class="n">symbol</span> <span class="n">mem_map</span>
+<div class="highlight"><pre><span class="n">Unknown</span> <span class="n">symbol</span> <span class="n">mem_map</span>
 </pre></div>
 
 
 <p>可以查看在/proc/kallsys或者是System.map中是否有这个变量。</p>
 <p>这个例子里面也用到了<code>page_address</code>来获得内核虚拟地址(<code>KVA</code>)。
 alloc_pages的原型如下：</p>
-<div class="codehilite"><pre><span class="o">/*</span>
-<span class="o">*</span> <span class="nv">@gfp_mask</span> <span class="p">[</span><span class="n">in</span><span class="p">]</span> <span class="err">就是上面说的那些掩码组合</span><span class="n">flag</span>
-<span class="o">*</span> <span class="nv">@order</span> <span class="p">[</span><span class="n">in</span><span class="p">]</span> <span class="err">需要分配空间的</span><span class="mi">2</span><span class="err">的指数值</span>
-<span class="o">*/</span>
-<span class="c1">#define alloc_pages(gfp_mask, order) \</span>
+<div class="highlight"><pre><span class="cm">/*</span>
+<span class="cm">* @gfp_mask [in] 就是上面说的那些掩码组合flag</span>
+<span class="cm">* @order [in] 需要分配空间的2的指数值</span>
+<span class="cm">*/</span>
+<span class="p">#</span><span class="n">define</span> <span class="n">alloc_pages</span><span class="p">(</span><span class="n">gfp_mask</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span> \
     <span class="n">alloc_pages_node</span><span class="p">(</span><span class="n">numa_node_id</span><span class="p">(),</span> <span class="n">gfp_mask</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
 </pre></div>
 
@@ -180,7 +207,7 @@ alloc_pages的原型如下：</p>
 <p>一个是分配填充为0的页，一个是在ZONE_DMA分配页。</p>
 <h2>slab分配器：分配比一个页更小的空间</h2>
 <p>在字符设备驱动中，经常有：</p>
-<div class="codehilite"><pre><span class="n">struct</span> <span class="n">cdev</span> <span class="o">*</span><span class="n">cdev_a</span> <span class="o">=</span> <span class="n">kmalloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span> <span class="n">cdev</span><span class="p">),</span><span class="n">GFP_KERNEL</span><span class="p">);</span>
+<div class="highlight"><pre><span class="k">struct</span> <span class="n">cdev</span> <span class="o">*</span><span class="n">cdev_a</span> <span class="o">=</span> <span class="n">kmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">cdev</span><span class="p">),</span><span class="n">GFP_KERNEL</span><span class="p">);</span>
 </pre></div>
 
 
@@ -210,7 +237,7 @@ alloc_pages的原型如下：</p>
 <h2>Per-CPU变量</h2>
 <p>per-CPU变量就是一个变量每个CPU都有一份，这样在访问这些变量的时候就不需要上锁保护以免同时被其他CPU修改，提高了效率。</p>
 <p>per-CPU被放到了特定的段内，且每个CPU都有自己的段，访问的时候就访问自己的段内的变量。</p>
-<div class="codehilite"><pre><span class="n">extern</span> <span class="n">__percpu</span> <span class="n">__attribute__</span><span class="p">((</span><span class="n">setction</span><span class="p">(</span><span class="s">&quot;data..percpu&quot;</span><span class="p">)))</span> <span class="nb">int</span> <span class="n">xyz</span>
+<div class="highlight"><pre><span class="k">extern</span> <span class="n">__percpu</span> <span class="n">__attribute__</span><span class="p">((</span><span class="n">setction</span><span class="p">(</span><span class="s">&quot;data..percpu&quot;</span><span class="p">)))</span> <span class="kt">int</span> <span class="n">xyz</span>
 </pre></div>
 
 
@@ -222,59 +249,58 @@ alloc_pages的原型如下：</p>
 <p>★1.CSAPP 2nd Edition：极好的书，对应的VM章节也是非常好，极其容易理解，踏实学完这本书对嵌入式开发有很大的帮助。</p>
 <p>☆2.Linux内核修炼之道：作者还有一本书比这本书有名《Linux那些事儿之我是USB》。修炼之道在大学的时候就看到了，但是看完确实在工作后的地铁上，这本书可以帮助初学linux内核的人对内核有一个总体的认识，并对linux的一些设计的进化和历史有一定的了解。同时讲述了如何查看一个驱动的代码，这些点点滴滴对于初学者是极好的辅助。推荐。</p>
 <p>★3.深入Linux设备驱动程序内核机制：博客前面的图片来源于此书。另外，这本书很不错，刚开始学习Linux设备驱动的同学可以看看，需要注意的是这本书的内核相对于现在的内核算是有点老了，但是瑕不掩瑜。同时可以结合<code>Linux Kernel Development</code>一起学习。</p>
-		</div><!-- /.entry-content -->
-				<div class="comments">
-		<h2>Comments !</h2>
-			<div id="disqus_thread"></div>
-			<script type="text/javascript">
-			   var disqus_identifier = "Linux MemoryManagement.html";
-			   (function() {
-				var dsq = document.createElement('script'); 
-				dsq.type = 'text/javascript'; dsq.async = true;
-				dsq.src = 'http://tonyhoblog.disqus.com/embed.js';
-				(document.getElementsByTagName('head')[0] || 
-				 document.getElementsByTagName('body')[0]).appendChild(dsq);
-			  })();
-			</script>
-		</div>
-			</article>
+                </div><!-- /.entry-content -->
+                <div class="comments">
+                <h2>Comments !</h2>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                           var disqus_identifier = "Linux MemoryManagement.html";
+                           (function() {
+                                var dsq = document.createElement('script');
+                                dsq.type = 'text/javascript'; dsq.async = true;
+                                dsq.src = 'http://tonyhoblog.disqus.com/embed.js';
+                                (document.getElementsByTagName('head')[0] ||
+                                 document.getElementsByTagName('body')[0]).appendChild(dsq);
+                          })();
+                        </script>
+                </div>
+        </article>
 </section>
         </div><!--/span-->
-      
-		<div class="span3" id="sidebar">
-            <div class="well">
-                <div class="sidebar-nav">
-                    <ul class="nav nav-list">
+
+                <div class="span3 well sidebar-nav" id="sidebar">
+<ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-external-link"></i>blogroll</h4></li>
-    <li><i class="icon-external-link"></i><a href="http://www.ibm.com/developerworks/">IBM developerworks</a></li>
-    <li><i class="icon-external-link"></i><a href="https://www.yoctoproject.org/documentation/current">Yocto docs</a></li>
+    <li><a href="http://www.ibm.com/developerworks/"><i class="icon-external-link"></i>IBM developerworks</a></li>
+    <li><a href="https://www.yoctoproject.org/documentation/current"><i class="icon-external-link"></i>Yocto docs</a></li>
 <li class="nav-header"><h4><i class="icon-home icon-large"></i> social</h4></li>
-<li><a href="./" rel="alternate"><i class="icon-bookmark icon-large"></i>atom feed</a></li>
+<li><a href="http://tonyho.github.io/" rel="alternate"><i class="icon-bookmark icon-large"></i>atom feed</a></li>
     <li><a href="http://github.com/tonyho"><i class="icon-github-sign icon-large"></i>github</a></li>
 
 <li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
 <li>
-<a href="./category/EmbeddedSystem.html">
+<a href="http://tonyho.github.io/category/embeddedsystem.html">
     <i class="icon-folder-open icon-large"></i>EmbeddedSystem
 </a>
 </li>
 
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
-<span class="tag-4">
-	<a href="./tag/MemoryManagement.html">
-		<i class="icon-tag icon-large"></i>MemoryManagement
-	</a>
-</span>
-<span class="tag-2">
-	<a href="./tag/LDD.html">
-		<i class="icon-tag icon-large"></i>LDD
-	</a>
-</span>
-<span class="tag-0">
-	<a href="./tag/ES.html">
-		<i class="icon-tag icon-large"></i>ES
-	</a>
-</span>
+<li class="tag-2">
+    <a href="http://tonyho.github.io/tag/ldd.html">
+        <i class="icon-tag icon-large"></i>LDD
+    </a>
+</li>
+<li class="tag-4">
+    <a href="http://tonyho.github.io/tag/memorymanagement.html">
+        <i class="icon-tag icon-large"></i>MemoryManagement
+    </a>
+</li>
+<li class="tag-0">
+    <a href="http://tonyho.github.io/tag/es.html">
+        <i class="icon-tag icon-large"></i>ES
+    </a>
+</li>
+
 
     
 
@@ -309,33 +335,35 @@ document.write("<p style='text-align: center'><strong><font style='color:green;f
 </Script>
 
 
-</ul>                </div>
-            </div>
-        </div><!--/.well -->
+</ul>        </div><!--/.well -->
 
       </div><!--/row-->
 
       <hr>
 
-      <footer><small>
+      <footer>
         <address id="about">
-          <p>Proudly powered by <a href="http://pelican.notmyidea.org/">Pelican <i class="icon-external-link"></i></a>, which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>. The theme is from <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>, and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+                Proudly powered by <a href="http://pelican.notmyidea.org/">Pelican <i class="icon-external-link"></i></a>,
+                                which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>.
         </address><!-- /#about -->
-      </small></footer>
+
+        <p>The theme is based on <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>,
+                   and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+      </footer>
 
     </div><!--/.fluid-container-->
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
 try {
-	var pageTracker = _gat._getTracker("UA-30756331-1");
+	var pageTracker = _gat._getTracker("UA-54180446-1");
 pageTracker._trackPageview();
 } catch(err) {}</script>
-        <script type="text/javascript">
+<script type="text/javascript">
     var disqus_shortname = 'tonyhoblog';
     (function () {
         var s = document.createElement('script'); s.async = true;
@@ -344,26 +372,10 @@ pageTracker._trackPageview();
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 </script>
-    
 
-
-    <!-- Le javascript
-    ================================================== -->
+    <!-- Le javascript -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="./theme/js/jquery.js"></script>
-    <script src="./theme/js/bootstrap-transition.js"></script>
-    <script src="./theme/js/bootstrap-alert.js"></script>
-    <script src="./theme/js/bootstrap-modal.js"></script>
-    <script src="./theme/js/bootstrap-dropdown.js"></script>
-    <script src="./theme/js/bootstrap-scrollspy.js"></script>
-    <script src="./theme/js/bootstrap-tab.js"></script>
-    <script src="./theme/js/bootstrap-tooltip.js"></script>
-    <script src="./theme/js/bootstrap-popover.js"></script>
-    <script src="./theme/js/bootstrap-button.js"></script>
-    <script src="./theme/js/bootstrap-collapse.js"></script>
-    <script src="./theme/js/bootstrap-carousel.js"></script>
-    <script src="./theme/js/bootstrap-typeahead.js"></script>
-	
-	<!--<script src="./theme/js/autosidebar.js"></script>-->
+    <script src="http://tonyho.github.io/theme/js/jquery-1.7.2.min.js"></script>
+    <script src="http://tonyho.github.io/theme/js/bootstrap.min.js"></script>
   </body>
 </html>

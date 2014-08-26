@@ -13,7 +13,7 @@ AUTHOR = 'TonyHo'
 DISQUS_SITENAME = 'tonyhoblog'
 GITHUB_URL = 'http://tonyho.github.io'#github链接
 SITEURL = 'http://tonyho.github.io'
-GOOGLE_ANALYTICS = 'UA-30756331-1'#谷歌站点分析
+GOOGLE_ANALYTICS = 'UA-54180446-1'#谷歌站点分析
 TAG_FEED_ATOM  = 'feeds/%s.atom.xml'
 
 
